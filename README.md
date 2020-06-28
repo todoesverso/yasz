@@ -1,5 +1,3 @@
 # YASS (Yet Another ~~Stupid~~ Simple Synthesizer)
 
-
-[![todoesverso](https://circleci.com/gh/todoesverso/yass.svg?style=svg)](https://circleci.com/gh/todoesverso/yass)
-
+![CI](https://github.com/todoesverso/yass/workflows/CI/badge.svg?branch=master)
