@@ -7,6 +7,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: apt update && apt install -y mesa-common-dev libjack-dev libgl1-mesa-dev
       - run: make
 
 workflows:
