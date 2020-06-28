@@ -1,9 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
@@ -11,22 +6,26 @@ on:
     branches: [ master ]
 
 jobs:
-  # This workflow contains a single job called "build"
+  lint:
+    runs-on: ubuntu-latest
+    container: ubuntu:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install cpplint
+      run: pip install cpplint
+    - name: Run cpplint
+      run: cpplint --recursive plugins/
+
   build:
     runs-on: ubuntu-latest
     container: gcc:latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
+    - name: Update git DPF submodule
       run: git submodule sync && git submodule update --init
-
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
+    - name: Install build dependecies
       run: |
-        apt update && apt install -y mesa-common-dev libjack-dev libgl1-mesa-dev        
-        make
+        apt update
+        apt install -y mesa-common-dev libjack-dev libgl1-mesa-dev        
+    - name: Build
+      run: make

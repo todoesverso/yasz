@@ -23,16 +23,14 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
 
-class YassUI : public UI
-{
-public:
+class YassUI : public UI {
+ public:
     YassUI()
-        : UI(405, 256)
-    {
+        : UI(405, 256) {
         setGeometryConstraints(405, 256, true);
     }
 
-protected:
+ protected:
    /* --------------------------------------------------------------------------------------------------------
     * DSP/Plugin Callbacks */
 
@@ -40,8 +38,7 @@ protected:
       A parameter has changed on the plugin side.
       This is called by the host to inform the UI about parameter changes.
     */
-    void parameterChanged(uint32_t , float) override
-    {
+    void parameterChanged(uint32_t , float) override {
         repaint();
     }
 
@@ -51,8 +48,7 @@ protected:
    /**
       Optional callback to inform the UI about a sample rate change on the plugin side.
     */
-    void sampleRateChanged(double) override
-    {
+    void sampleRateChanged(double) override {
         repaint();
     }
 
@@ -62,17 +58,15 @@ protected:
    /**
       The NanoVG drawing function.
     */
-    void onNanoDisplay() override
-    {}
+    void onNanoDisplay() override {}
 
-    void onResize(const ResizeEvent& ev) override
-    {
+    void onResize(const ResizeEvent& ev) override {
         UI::onResize(ev);
     }
 
     // -------------------------------------------------------------------------------------------------------
 
-private:
+ private:
     // Parameters
    /**
       Set our UI class as non-copyable and add a leak detector just in case.
@@ -83,8 +77,7 @@ private:
 /* ------------------------------------------------------------------------------------------------------------
  * UI entry point, called by DPF to create a new UI instance. */
 
-UI* createUI()
-{
+UI* createUI() {
     return new YassUI();
 }
 

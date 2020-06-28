@@ -18,20 +18,15 @@
 
 START_NAMESPACE_DISTRHO
 
-// -----------------------------------------------------------------------------------------------------------
-
 /**
   Plugin to show how to get some basic information sent to the UI.
  */
-class YassPlugin : public Plugin
-{
-public:
+class YassPlugin : public Plugin {
+ public:
     YassPlugin()
-        : Plugin(kParameterCount, 0, 0)
-    {
-    }
+        : Plugin(kParameterCount, 0, 0) {}
 
-protected:
+ protected:
    /* --------------------------------------------------------------------------------------------------------
     * Information */
 
@@ -39,32 +34,28 @@ protected:
       Get the plugin label.
       This label is a short restricted name consisting of only _, a-z, A-Z and 0-9 characters.
     */
-    const char* getLabel() const override
-    {
+    const char* getLabel() const override {
         return DISTRHO_PLUGIN_NAME;
     }
 
    /**
       Get an extensive comment/description about the plugin.
     */
-    const char* getDescription() const override
-    {
+    const char* getDescription() const override {
         return "Plugin to load and use YASS";
     }
 
    /**
       Get the plugin author/maker.
     */
-    const char* getMaker() const override
-    {
+    const char* getMaker() const override {
         return DISTRHO_PLUGIN_BRAND;
     }
 
    /**
       Get the plugin homepage.
     */
-    const char* getHomePage() const override
-    {
+    const char* getHomePage() const override {
         return DISTRHO_PLUGIN_URI;
     }
 
@@ -72,16 +63,14 @@ protected:
       Get the plugin license name (a single line of text).
       For commercial plugins this should return some short copyright information.
     */
-    const char* getLicense() const override
-    {
+    const char* getLicense() const override {
         return "GPL-3";
     }
 
    /**
       Get the plugin version, in hexadecimal.
     */
-    uint32_t getVersion() const override
-    {
+    uint32_t getVersion() const override {
         return d_version(0, 0, 1);
     }
 
@@ -89,8 +78,7 @@ protected:
       Get the plugin unique Id.
       This value is used by LADSPA, DSSI and VST plugin formats.
     */
-    int64_t getUniqueId() const override
-    {
+    int64_t getUniqueId() const override {
         return d_cconst('Y', 'A', 'S', 'S');
     }
 
@@ -101,8 +89,7 @@ protected:
       Initialize the parameter @a index.
       This function will be called once, shortly after the plugin is created.
     */
-    void initParameter(uint32_t , Parameter&) override
-    {}
+    void initParameter(uint32_t , Parameter&) override {}
    /* --------------------------------------------------------------------------------------------------------
     * Internal data */
 
@@ -110,8 +97,7 @@ protected:
       Get the current value of a parameter.
       The host may call this function from any context, including realtime processing.
     */
-    float getParameterValue(uint32_t) const override
-    {}
+    float getParameterValue(uint32_t) const override {}
 
    /**
       Change a parameter value.
@@ -119,8 +105,7 @@ protected:
       When a parameter is marked as automable, you must ensure no non-realtime operations are performed.
       @note This function will only be called for parameter inputs.
     */
-    void setParameterValue(uint32_t, float) override
-    {
+    void setParameterValue(uint32_t, float) override {
         // this is only called for input parameters, which we have none of.
     }
 
@@ -132,15 +117,14 @@ protected:
       @note Some parameters might be null if there are no audio inputs or outputs.
     */
     void run(const float**, float** outputs, uint32_t frames,
-        const MidiEvent* midiEvents, uint32_t midiEventCount) override
-    {
+        const MidiEvent* midiEvents, uint32_t midiEventCount) override {
     }
 
    /* --------------------------------------------------------------------------------------------------------
     * Callbacks (optional) */
     // -------------------------------------------------------------------------------------------------------
 
-private:
+ private:
     // Parameters
 
    /**
@@ -152,8 +136,7 @@ private:
 /* ------------------------------------------------------------------------------------------------------------
  * Plugin entry point, called by DPF to create a new plugin instance. */
 
-Plugin* createPlugin()
-{
+Plugin* createPlugin() {
     return new YassPlugin();
 }
 
