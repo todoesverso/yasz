@@ -14,7 +14,7 @@ jobs:
     - name: Install cpplint
       run: pip install cpplint
     - name: Run cpplint
-      run: cpplint --recursive plugins/
+      run: cpplint --recursive --root=. plugins/
 
   build:
     runs-on: ubuntu-latest
