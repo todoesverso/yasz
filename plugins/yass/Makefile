@@ -13,7 +13,8 @@ NAME = yass
 # Files to build
 
 FILES_DSP = \
-	YassPlugin.cpp
+	YassPlugin.cpp \
+	lib/osc.c lib/utils.c
 
 FILES_UI  = \
 	YassUI.cpp
@@ -22,7 +23,7 @@ FILES_UI  = \
 # Do some magic
 
 include ../../dpf/Makefile.plugins.mk
-
+BASE_FLAGS += -fdiagnostics-color
 # --------------------------------------------------------------
 # Enable all possible plugin types
 
