@@ -16,6 +16,6 @@
 
 #include "lib/utils.h"
 
-inline double midi_to_freq(uint8_t note) {
+double midi_to_freq(uint8_t note) {
   return 440.0f * powf(2.0f, (note - 69.f) / 12.0f);
 }

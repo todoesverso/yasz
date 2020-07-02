@@ -15,7 +15,9 @@
  */
 
 #include "DistrhoPlugin.hpp"
-
+extern "C" {
+#include "lib/osc.h"
+}
 START_NAMESPACE_DISTRHO
 
 /**
@@ -24,7 +26,10 @@ START_NAMESPACE_DISTRHO
 class YassPlugin : public Plugin {
  public:
     YassPlugin()
-        : Plugin(kParameterCount, 0, 0) {}
+        : Plugin(kParameterCount, 0, 0) {
+          uint32_t srate = (uint32_t)getSampleRate();
+          osc = new_osc(srate);
+        }
 
  protected:
    /* --------------------------------------------------------------------------------------------------------
@@ -112,12 +117,73 @@ class YassPlugin : public Plugin {
    /* --------------------------------------------------------------------------------------------------------
     * Audio/MIDI Processing */
 
+    void activate() {
+      for (int i=0; i < 128; i++) {
+        noteState[i] = false;
+      }
+    }
+
    /**
       Run/process function for plugins without MIDI input.
       @note Some parameters might be null if there are no audio inputs or outputs.
     */
     void run(const float**, float** outputs, uint32_t frames,
         const MidiEvent* midiEvents, uint32_t midiEventCount) override {
+          float* const outL = outputs[0];
+          float* const outR = outputs[1];
+
+          uint32_t fDone = 0;
+          uint32_t curEventIndex = 0;
+          uint32_t fToProcess = 0;
+          uint8_t note, velo;
+
+          while (fDone < frames) {
+            /* process any ready midi event */
+            /* start midi process */
+            while (curEventIndex < midiEventCount &&
+                fDone == midiEvents[curEventIndex].frame) {
+              if (midiEvents[curEventIndex].size > MidiEvent::kDataSize)
+                continue;
+
+              const uint8_t* data = midiEvents[curEventIndex].data;
+              const uint8_t status = data[0] & 0xF0;
+              note = data[1];
+              velo = data[2];
+              DISTRHO_SAFE_ASSERT_BREAK(note < 128);
+
+              switch (status) {
+                case 0x90:
+                  if (noteState[note] && velo == 0)
+                      noteState[note] = false;
+
+                  if (velo > 0) {
+                      noteState[note] = true;
+                      update_freq_from_midi_note(osc, note);
+                  }
+                  break;
+                case 0x80:
+                  if (noteState[note])
+                      noteState[note] = false;
+                  break;
+              }
+              curEventIndex++;
+            }
+            /* stop midi process */
+
+            if (curEventIndex < midiEventCount &&
+                midiEvents[curEventIndex].frame < frames)
+              fToProcess = midiEvents[curEventIndex].frame - fDone;
+            else
+              fToProcess = frames - fDone;
+
+            for (uint32_t i = fDone; i < fDone + fToProcess; ++i) {
+              float sample = static_cast<float> get_output(osc);
+              outL[i] = sample;
+              outR[i] = sample;
+            }
+
+            fDone += fToProcess;
+          }
     }
 
    /* --------------------------------------------------------------------------------------------------------
@@ -126,6 +192,8 @@ class YassPlugin : public Plugin {
 
  private:
     // Parameters
+    bool noteState[128];
+    OSC *osc;
 
    /**
       Set our plugin class as non-copyable and add a leak detector just in case.

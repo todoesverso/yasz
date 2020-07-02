@@ -56,10 +56,10 @@ void update_freq_from_midi_note(OSC* p_osc, uint8_t note) {
   p_osc->freq = midi_to_freq(note);
   p_osc->phase = calc_new_phase(p_osc);
 }
-void update_phase(OSC *p_osc, double phase) {
+void update_phase(OSC* p_osc, double phase) {
   p_osc->phase = phase;
 }
-void update_srate(OSC *p_osc, uint32_t srate) {
+void update_srate(OSC* p_osc, uint32_t srate) {
   p_osc->srate = srate;
 }
 
