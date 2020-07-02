@@ -177,7 +177,7 @@ class YassPlugin : public Plugin {
               fToProcess = frames - fDone;
 
             for (uint32_t i = fDone; i < fDone + fToProcess; ++i) {
-              float sample = static_cast<float> get_output(osc);
+              float sample = static_cast<float>(get_output(osc));
               outL[i] = sample;
               outR[i] = sample;
             }
