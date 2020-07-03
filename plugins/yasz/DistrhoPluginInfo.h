@@ -18,8 +18,8 @@
 see https://distrho.github.io/DPF/group__PluginMacros.html
 */
 
-#ifndef PLUGINS_YASS_DISTRHOPLUGININFO_H_
-#define PLUGINS_YASS_DISTRHOPLUGININFO_H_
+#ifndef PLUGINS_YASZ_DISTRHOPLUGININFO_H_
+#define PLUGINS_YASZ_DISTRHOPLUGININFO_H_
 
 #define DISTRHO_PLUGIN_BRAND "todoesverso"
 #define DISTRHO_PLUGIN_NAME "YASS"
@@ -41,4 +41,4 @@ enum Parameters {
   kParameterCount
 };
 
-#endif  // PLUGINS_YASS_DISTRHOPLUGININFO_H_
+#endif  // PLUGINS_YASZ_DISTRHOPLUGININFO_H_

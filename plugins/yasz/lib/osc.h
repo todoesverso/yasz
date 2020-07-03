@@ -15,8 +15,8 @@
  */
 
 
-#ifndef PLUGINS_YASS_LIB_OSC_H_
-#define PLUGINS_YASS_LIB_OSC_H_
+#ifndef PLUGINS_YASZ_LIB_OSC_H_
+#define PLUGINS_YASZ_LIB_OSC_H_
 
 #include <math.h>
 #include <stdint.h>
@@ -41,4 +41,4 @@ void update_freq_from_midi_note(OSC* p_osc, uint8_t note);
 void update_phase(OSC *p_osc, double phase);
 void update_srate(OSC *p_osc, uint32_t srate);
 
-#endif  // PLUGINS_YASS_LIB_OSC_H_
+#endif  // PLUGINS_YASZ_LIB_OSC_H_
