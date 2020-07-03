@@ -14,7 +14,7 @@ dgl:
 	$(MAKE) -C dpf/dgl
 
 plugins: dgl
-	$(MAKE) all -C plugins/yass
+	$(MAKE) all -C plugins/yasz
 
 ifneq ($(CROSS_COMPILING),true)
 gen: plugins dpf/utils/lv2_ttl_generator
@@ -34,12 +34,12 @@ endif
 clean:
 	$(MAKE) clean -C dpf/dgl
 	$(MAKE) clean -C dpf/utils/lv2-ttl-generator
-	$(MAKE) clean -C plugins/yass
+	$(MAKE) clean -C plugins/yasz
 	rm -rf bin build
 
 install:
-	install -d ${HOME}/.lv2/yass.lv2/
-	install -m 644 -D bin/yass.lv2/* ${HOME}/.lv2/yass.lv2/
+	install -d ${HOME}/.lv2/yasz.lv2/
+	install -m 644 -D bin/yasz.lv2/* ${HOME}/.lv2/yasz.lv2/
 # --------------------------------------------------------------
 
 .PHONY: plugins
