@@ -7,17 +7,17 @@
 # --------------------------------------------------------------
 # Project name, used for binaries
 
-NAME = yass
+NAME = yasz
 
 # --------------------------------------------------------------
 # Files to build
 
 FILES_DSP = \
-	YassPlugin.cpp \
+	YaszPlugin.cpp \
 	lib/osc.c lib/utils.c
 
 FILES_UI  = \
-	YassUI.cpp
+	YaszUI.cpp
 
 # --------------------------------------------------------------
 # Do some magic

@@ -23,9 +23,9 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
 
-class YassUI : public UI {
+class YaszUI : public UI {
  public:
-    YassUI()
+    YaszUI()
         : UI(405, 256) {
         setGeometryConstraints(405, 256, true);
     }
@@ -71,14 +71,14 @@ class YassUI : public UI {
    /**
       Set our UI class as non-copyable and add a leak detector just in case.
     */
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(YassUI)
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(YaszUI)
 };
 
 /* ------------------------------------------------------------------------------------------------------------
  * UI entry point, called by DPF to create a new UI instance. */
 
 UI* createUI() {
-    return new YassUI();
+    return new YaszUI();
 }
 
 // -----------------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /*
- * YASS (Yet Another Simple Synthesizer)
+ * YASZ (Yet Another Simple synthesiZer)
  * Copyright (C) 2020 Victor Rosales <todoesverso@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
@@ -23,9 +23,9 @@ START_NAMESPACE_DISTRHO
 /**
   Plugin to show how to get some basic information sent to the UI.
  */
-class YassPlugin : public Plugin {
+class YaszPlugin : public Plugin {
  public:
-    YassPlugin()
+    YaszPlugin()
         : Plugin(kParameterCount, 0, 0) {
           uint32_t srate = (uint32_t)getSampleRate();
           osc = new_osc(srate);
@@ -198,14 +198,14 @@ class YassPlugin : public Plugin {
    /**
       Set our plugin class as non-copyable and add a leak detector just in case.
     */
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(YassPlugin)
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(YaszPlugin)
 };
 
 /* ------------------------------------------------------------------------------------------------------------
  * Plugin entry point, called by DPF to create a new plugin instance. */
 
 Plugin* createPlugin() {
-    return new YassPlugin();
+    return new YaszPlugin();
 }
 
 // -----------------------------------------------------------------------------------------------------------
