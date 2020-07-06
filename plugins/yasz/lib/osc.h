@@ -31,11 +31,13 @@
 typedef struct t_osc {
   double freq;
   double phase;
+  double phaseinc;
+  double twopioversr;
   uint32_t srate;
 } OSC;
 
 OSC* new_osc(uint32_t srate);
-double get_output(OSC* p_osc);
+double osc_get_out_rt(OSC* p_osc);
 void update_freq(OSC* p_osc, double newfreq);
 void update_freq_from_midi_note(OSC* p_osc, uint8_t note);
 void update_phase(OSC *p_osc, double phase);

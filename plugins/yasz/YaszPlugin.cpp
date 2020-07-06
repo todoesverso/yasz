@@ -16,7 +16,7 @@
 
 #include "DistrhoPlugin.hpp"
 extern "C" {
-#include "lib/osc.h"
+#include "lib/yasz.h"
 }
 START_NAMESPACE_DISTRHO
 
@@ -28,7 +28,7 @@ class YaszPlugin : public Plugin {
     YaszPlugin()
         : Plugin(kParameterCount, 0, 0) {
           uint32_t srate = (uint32_t)getSampleRate();
-          osc = new_osc(srate);
+          yasz = yasz_new(srate);
         }
 
  protected:
@@ -118,9 +118,6 @@ class YaszPlugin : public Plugin {
     * Audio/MIDI Processing */
 
     void activate() {
-      for (int i=0; i < 128; i++) {
-        noteState[i] = false;
-      }
     }
 
    /**
@@ -135,7 +132,6 @@ class YaszPlugin : public Plugin {
           uint32_t fDone = 0;
           uint32_t curEventIndex = 0;
           uint32_t fToProcess = 0;
-          uint8_t note, velo;
 
           while (fDone < frames) {
             /* process any ready midi event */
@@ -145,27 +141,9 @@ class YaszPlugin : public Plugin {
               if (midiEvents[curEventIndex].size > MidiEvent::kDataSize)
                 continue;
 
-              const uint8_t* data = midiEvents[curEventIndex].data;
-              const uint8_t status = data[0] & 0xF0;
-              note = data[1];
-              velo = data[2];
-              DISTRHO_SAFE_ASSERT_BREAK(note < 128);
-
-              switch (status) {
-                case 0x90:
-                  if (noteState[note] && velo == 0)
-                      noteState[note] = false;
-
-                  if (velo > 0) {
-                      noteState[note] = true;
-                      update_freq_from_midi_note(osc, note);
-                  }
-                  break;
-                case 0x80:
-                  if (noteState[note])
-                      noteState[note] = false;
-                  break;
-              }
+              yasz_proc_midi(yasz,
+                  midiEvents[curEventIndex].size,
+                  midiEvents[curEventIndex].data);
               curEventIndex++;
             }
             /* stop midi process */
@@ -177,9 +155,9 @@ class YaszPlugin : public Plugin {
               fToProcess = frames - fDone;
 
             for (uint32_t i = fDone; i < fDone + fToProcess; ++i) {
-              float sample = static_cast<float>(get_output(osc));
-              outL[i] = sample;
-              outR[i] = sample;
+              yasz_render_rt(yasz);
+              outL[i] = 0.5f * static_cast<float>(yasz->left);
+              outR[i] = 0.5f * static_cast<float>(yasz->right);
             }
 
             fDone += fToProcess;
@@ -192,8 +170,7 @@ class YaszPlugin : public Plugin {
 
  private:
     // Parameters
-    bool noteState[128];
-    OSC *osc;
+    YASZ *yasz;
 
    /**
       Set our plugin class as non-copyable and add a leak detector just in case.

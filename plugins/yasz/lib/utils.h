@@ -15,8 +15,8 @@
  */
 
 
-#ifndef PLUGINS_YASS_LIB_UTILS_H_
-#define PLUGINS_YASS_LIB_UTILS_H_
+#ifndef PLUGINS_YASZ_LIB_UTILS_H_
+#define PLUGINS_YASZ_LIB_UTILS_H_
 
 #include <math.h>
 #include <stdint.h>
@@ -26,7 +26,15 @@
 #ifndef TWO_PI
 #define TWO_PI (6.283185307179586)
 #endif
+#ifndef TRUE
+typedef enum { FALSE, TRUE} boolean;
+#endif
 
+#ifndef MIN
+#define MIN(n1, n2)   ((n1) > (n2) ? (n2) : (n1))
+#endif
 
-double midi_to_freq(uint8_t note);
-#endif  // PLUGINS_YASS_LIB_UTILS_H_
+#ifndef MAX
+#define MAX(n1, n2)   ((n1) > (n2) ? (n1) : (n2))
+#endif
+#endif  // PLUGINS_YASZ_LIB_UTILS_H_
