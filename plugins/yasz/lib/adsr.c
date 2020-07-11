@@ -29,12 +29,12 @@ static void adsr_init(ADSR *p) {
   p->state = IDLE;
   p->out = 0.0;
 
-  adsr_set_attack_rate(p, 0);
-  adsr_set_decay_rate(p, 0);
-  adsr_set_release_rate(p, 0);
-  adsr_set_sustain_level(p, 1.0);
-  adsr_set_target_ratio_a(p, 0.3);
-  adsr_set_target_ratio_dr(p, 0.00001);
+  adsr_set_attack_rate_rt(p, 0);
+  adsr_set_decay_rate_rt(p, 0);
+  adsr_set_release_rate_rt(p, 0);
+  adsr_set_sustain_level_rt(p, 1.0);
+  adsr_set_target_ratio_a_rt(p, 0.3);
+  adsr_set_target_ratio_dr_rt(p, 0.00001);
 }
 
 ADSR* adsr_new() {
@@ -45,41 +45,41 @@ ADSR* adsr_new() {
   return p;
 }
 
-void adsr_set_attack_rate(ADSR *p, double rate) {
+void adsr_set_attack_rate_rt(ADSR *p, double rate) {
   p->arate = rate;
-  p->acoef = adsr_calc_coef(rate, p->targetratioa);
+  p->acoef = adsr_calc_coef_rt(rate, p->targetratioa);
   p->abase = (1.0 + p->targetratioa) * (1.0 - p->acoef);
 }
 
-void adsr_set_decay_rate(ADSR *p, double rate) {
+void adsr_set_decay_rate_rt(ADSR *p, double rate) {
   p->drate = rate;
-  p->dcoef = adsr_calc_coef(rate, p->targetratiodr);
+  p->dcoef = adsr_calc_coef_rt(rate, p->targetratiodr);
   p->dbase = (p->slevel - p->targetratiodr) * (1.0 - p->dcoef);
 }
 
-void adsr_set_release_rate(ADSR *p, double rate) {
+void adsr_set_release_rate_rt(ADSR *p, double rate) {
   p->rrate = rate;
-  p->rcoef = adsr_calc_coef(rate, p->targetratiodr);
+  p->rcoef = adsr_calc_coef_rt(rate, p->targetratiodr);
   p->rbase = -p->targetratiodr * (1.0 - p->rcoef);
 }
 
-void adsr_set_sustain_level(ADSR *p, double level) {
+void adsr_set_sustain_level_rt(ADSR *p, double level) {
   p->slevel = level;
   p->dbase = (p->slevel - p->targetratiodr) * (1.0 - p->dcoef);
 }
 
-void adsr_set_target_ratio_a(ADSR *p , double ratio) {
-  ratio = min_ratio_db(ratio);
+void adsr_set_target_ratio_a_rt(ADSR *p , double ratio) {
+  ratio = min_ratio_db_rt(ratio);
   p->targetratioa = ratio;
-  p->acoef = adsr_calc_coef(p->arate, p->targetratioa);
+  p->acoef = adsr_calc_coef_rt(p->arate, p->targetratioa);
   p->abase = (1.0 + p->targetratioa) * (1.0 - p->acoef);
 }
 
-void adsr_set_target_ratio_dr(ADSR *p , double ratio) {
-  ratio = min_ratio_db(ratio);
+void adsr_set_target_ratio_dr_rt(ADSR *p , double ratio) {
+  ratio = min_ratio_db_rt(ratio);
   p->targetratiodr = ratio;
-  p->dcoef = adsr_calc_coef(p->drate, p->targetratiodr);
-  p->rcoef = adsr_calc_coef(p->rrate, p->targetratiodr);
+  p->dcoef = adsr_calc_coef_rt(p->drate, p->targetratiodr);
+  p->rcoef = adsr_calc_coef_rt(p->rrate, p->targetratiodr);
   p->dbase = (p->slevel - p->targetratiodr) * (1.0 - p->dcoef);
   p->rbase = -p->targetratiodr * (1.0 - p->rcoef);
 }

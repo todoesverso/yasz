@@ -55,20 +55,19 @@ typedef struct t_adsr {
 } ADSR;
 
 ADSR* adsr_new();
-void adsr_set_attack_rate(ADSR *p_adsr, double rate);
-void adsr_set_decay_rate(ADSR *p_adsr, double rate);
-void adsr_set_release_rate(ADSR *p_adsr, double rate);
-void adsr_set_target_ratio_a(ADSR *p_adsr, double rate);
-void adsr_set_target_ratio_dr(ADSR *p_adsr, double rate);
-void adsr_set_sustain_level(ADSR *p_adsr, double level);
-void adsr_set_attack_rate(ADSR *p_adsr, double rate);
+void adsr_set_attack_rate_rt(ADSR *p_adsr, double rate);
+void adsr_set_decay_rate_rt(ADSR *p_adsr, double rate);
+void adsr_set_release_rate_rt(ADSR *p_adsr, double rate);
+void adsr_set_target_ratio_a_rt(ADSR *p_adsr, double rate);
+void adsr_set_target_ratio_dr_rt(ADSR *p_adsr, double rate);
+void adsr_set_sustain_level_rt(ADSR *p_adsr, double level);
+void adsr_set_attack_rate_rt(ADSR *p_adsr, double rate);
 
 #define DBMIN180 (0.000000001)  // -180dB
-#define adsr_calc_coef(r, tr) ((r <= 0) ? 0.0 : exp(-log((1.0 + tr) / tr) / r))
-#define min_ratio_db(r) ((r < DBMIN180) ? DBMIN180 : r)
+#define adsr_calc_coef_rt(r, tr) ((r <= 0) ? 0.0 : exp(-log((1.0 + tr) / tr) / r))  // NOLINT(whitespace/line_length)
+#define min_ratio_db_rt(r) ((r < DBMIN180) ? DBMIN180 : r)
 
-
-inline double adsr_process(ADSR *p) {
+inline double adsr_process_rt(ADSR *p) {
   switch (p->state) {
     case IDLE:
       break;
@@ -99,7 +98,7 @@ inline double adsr_process(ADSR *p) {
   return p->out;
 }
 
-inline void adsr_gate(ADSR *p, uint8_t gate) {
+inline void adsr_gate_rt(ADSR *p, uint8_t gate) {
   if (gate) {
     p->state = ATTACK;
   } else if (p->state != IDLE) {
@@ -107,4 +106,6 @@ inline void adsr_gate(ADSR *p, uint8_t gate) {
   }
 }
 
+#define adsr_gate_on_rt(p) (adsr_gate_rt(p, 1))
+#define adsr_gate_off_rt(p) (adsr_gate_rt(p, 0))
 #endif  // PLUGINS_YASZ_LIB_ADSR_H_

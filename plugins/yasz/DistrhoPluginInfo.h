@@ -22,8 +22,8 @@ see https://distrho.github.io/DPF/group__PluginMacros.html
 #define PLUGINS_YASZ_DISTRHOPLUGININFO_H_
 
 #define DISTRHO_PLUGIN_BRAND "todoesverso"
-#define DISTRHO_PLUGIN_NAME "YASS"
-#define DISTRHO_PLUGIN_URI "https://github.com/todoesverso/yass"
+#define DISTRHO_PLUGIN_NAME "YASZ"
+#define DISTRHO_PLUGIN_URI "https://github.com/todoesverso/yasz"
 
 #define DISTRHO_PLUGIN_HAS_UI           1
 #define DISTRHO_PLUGIN_IS_RT_SAFE       1

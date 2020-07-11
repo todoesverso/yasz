@@ -47,7 +47,7 @@ class YaszPlugin : public Plugin {
       Get an extensive comment/description about the plugin.
     */
     const char* getDescription() const override {
-        return "Plugin to load and use YASS";
+        return "Plugin to load and use YASZ";
     }
 
    /**
@@ -84,7 +84,7 @@ class YaszPlugin : public Plugin {
       This value is used by LADSPA, DSSI and VST plugin formats.
     */
     int64_t getUniqueId() const override {
-        return d_cconst('Y', 'A', 'S', 'S');
+        return d_cconst('Y', 'A', 'S', 'Z');
     }
 
    /* --------------------------------------------------------------------------------------------------------
