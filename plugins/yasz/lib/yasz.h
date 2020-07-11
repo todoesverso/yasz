@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include "lib/utils.h"
 #include "lib/osc.h"
+#include "lib/adsr.h"
 
 typedef struct t_yasz {
   // yasz should have:
@@ -28,6 +29,7 @@ typedef struct t_yasz {
   //   - an array of voices with adsr
 
   OSC *p_osc;              // voices is osc + note + adsr?
+  ADSR * p_adsr;
   uint8_t noteState[128];  // this should be the voices?
 
   /* does this make any sense? */

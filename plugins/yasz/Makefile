@@ -14,7 +14,7 @@ NAME = yasz
 
 FILES_DSP = \
 	YaszPlugin.cpp \
-	lib/osc.c lib/utils.c lib/yasz.c
+	lib/osc.c lib/utils.c lib/yasz.c lib/adsr.c
 
 FILES_UI  = \
 	YaszUI.cpp
