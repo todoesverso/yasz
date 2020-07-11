@@ -32,7 +32,7 @@ static YASZ* yasz_malloc() {
 }
 
 static void yasz_init(YASZ *p, double const srate) {
-  p->p_osc = new_osc(srate);
+  p->p_osc = osc_new(srate);
   p->p_adsr = adsr_new();
   p->left = 0.0f;
   p->right = 0.0f;
@@ -66,9 +66,9 @@ void yasz_proc_midi(YASZ *p_yasz,
   if (size > 3)
     return;
 
-  const uint8_t status = get_midi_status_rt(data);
-  const uint8_t note = get_midi_note_rt(data);
-  const uint8_t velo = get_midi_note_vel_rt(data);
+  const uint8_t status = midi_get_status_rt(data);
+  const uint8_t note = midi_get_note_rt(data);
+  const uint8_t velo = midi_get_note_vel_rt(data);
 
   switch (status) {
   case MIDI_NOTE_ON:
@@ -79,7 +79,7 @@ void yasz_proc_midi(YASZ *p_yasz,
 
     if (velo > 0) {
       p_yasz->noteState[note] = NOTE_ON;
-      update_freq_from_midi_note_rt(p_yasz->p_osc, note);
+      osc_update_freq_from_midi_note_rt(p_yasz->p_osc, note);
       adsr_gate_on_rt(p_yasz->p_adsr);
     }
     break;

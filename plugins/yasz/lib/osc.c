@@ -22,7 +22,7 @@
 
 static OSC* osc_malloc();
 static void osc_init(OSC* p_osc, uint32_t srate);
-static double calc_new_phase(OSC* p_osc);
+static double osc_calc_new_phase(OSC* p_osc);
 
 static OSC* osc_malloc() {
   OSC* p_osc;
@@ -38,11 +38,11 @@ static void osc_init(OSC* p_osc, uint32_t srate) {
   p_osc->twopioversr = (double)TWO_PI / srate;  // NOLINT(readability/casting)
 }
 
-static double calc_new_phase(OSC* p_osc) {
+static double osc_calc_new_phase(OSC* p_osc) {
   return p_osc->twopioversr * p_osc->freq;
 }
 
-OSC* new_osc(uint32_t srate) {
+OSC* osc_new(uint32_t srate) {
   OSC* p_osc = osc_malloc();
   if (p_osc == NULL)
     return NULL;
@@ -50,18 +50,18 @@ OSC* new_osc(uint32_t srate) {
   return p_osc;
 }
 
-void update_freq(OSC* p_osc, double newfreq) {
+void osc_update_freq(OSC* p_osc, double newfreq) {
   p_osc->freq = newfreq;
-  p_osc->phaseinc = calc_new_phase(p_osc);
+  p_osc->phaseinc = osc_calc_new_phase(p_osc);
 }
-void update_freq_from_midi_note_rt(OSC* p_osc, uint8_t note) {
+void osc_update_freq_from_midi_note_rt(OSC* p_osc, uint8_t note) {
   p_osc->freq = midi_to_freq_rt(note);
-  p_osc->phaseinc = calc_new_phase(p_osc);
+  p_osc->phaseinc = osc_calc_new_phase(p_osc);
 }
-void update_phase(OSC* p_osc, double phase) {
+void osc_update_phase(OSC* p_osc, double phase) {
   p_osc->phase = phase;
 }
-void update_srate(OSC* p_osc, uint32_t srate) {
+void osc_update_srate(OSC* p_osc, uint32_t srate) {
   p_osc->srate = srate;
   p_osc->twopioversr = (double)TWO_PI / srate;  // NOLINT(readability/casting)
 }

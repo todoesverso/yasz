@@ -36,11 +36,11 @@ typedef struct t_osc {
   uint32_t srate;
 } OSC;
 
-OSC* new_osc(uint32_t srate);
+OSC* osc_new(uint32_t srate);
 double osc_get_out_rt(OSC* p_osc);
-void update_freq(OSC* p_osc, double newfreq);
-void update_freq_from_midi_note_rt(OSC* p_osc, uint8_t note);
-void update_phase(OSC *p_osc, double phase);
-void update_srate(OSC *p_osc, uint32_t srate);
+void osc_update_freq(OSC* p_osc, double newfreq);
+void osc_update_freq_from_midi_note_rt(OSC* p_osc, uint8_t note);
+void osc_update_phase(OSC *p_osc, double phase);
+void osc_update_srate(OSC *p_osc, uint32_t srate);
 
 #endif  // PLUGINS_YASZ_LIB_OSC_H_

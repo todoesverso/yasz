@@ -36,9 +36,9 @@ enum midi_status_index_from_event {
 };
 
 // MSB, discard channel
-#define get_midi_status_rt(x)   (x[MIDI_STATUS_BYTE] & 0xF0)
-#define get_midi_note_rt(x)     (x[MIDI_NOTE_BYTE])
-#define get_midi_note_vel_rt(x) (x[MIDI_VEL_BYTE])
+#define midi_get_status_rt(x)   (x[MIDI_STATUS_BYTE] & 0xF0)
+#define midi_get_note_rt(x)     (x[MIDI_NOTE_BYTE])
+#define midi_get_note_vel_rt(x) (x[MIDI_VEL_BYTE])
 // maybe convert to fixed lookup table?
 #define midi_to_freq_rt(x)      (440.0f*powf(2.0f, ((x)-69.f)/12.0f))
 
