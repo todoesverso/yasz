@@ -17,6 +17,7 @@
 
 #ifndef PLUGINS_YASZ_LIB_MIDI_H_
 #define PLUGINS_YASZ_LIB_MIDI_H_
+#include <stdint.h>
 
 #define MIDI_NOTE_OFF         0x80
 #define MIDI_NOTE_ON          0x90
@@ -35,11 +36,17 @@ enum midi_status_index_from_event {
   MIDI_VEL_BYTE
 };
 
+typedef struct midi_t {
+  uint8_t notestate;
+} MIDI;
+
 // MSB, discard channel
 #define midi_get_status_rt(x)   (x[MIDI_STATUS_BYTE] & 0xF0)
 #define midi_get_note_rt(x)     (x[MIDI_NOTE_BYTE])
 #define midi_get_note_vel_rt(x) (x[MIDI_VEL_BYTE])
 // maybe convert to fixed lookup table?
 #define midi_to_freq_rt(x)      (440.0f*powf(2.0f, ((x)-69.f)/12.0f))
+
+MIDI *midi_new();
 
 #endif  // PLUGINS_YASZ_LIB_MIDI_H_

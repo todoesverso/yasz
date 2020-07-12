@@ -23,7 +23,7 @@
 #include "lib/adsr.h"
 
 static YASZ* yasz_malloc();
-static void yasz_init(YASZ *p, double const srate);
+static void yasz_init(YASZ *p, uint32_t const srate);
 
 static YASZ* yasz_malloc() {
   YASZ* p;
@@ -31,7 +31,7 @@ static YASZ* yasz_malloc() {
   return p;
 }
 
-static void yasz_init(YASZ *p, double const srate) {
+static void yasz_init(YASZ *p, uint32_t const srate) {
   p->p_osc = osc_new(srate);
   p->p_adsr = adsr_new();
   p->left = 0.0f;
