@@ -34,6 +34,13 @@ static void voice_init(VOICE* p, uint32_t const srate) {
   p->osc = osc_new(srate);
   p->adsr = adsr_new();
   p->midi = midi_new();
+  p->left = 0.0f;
+  p->right = 0.0f;
+
+  adsr_set_attack_rate_rt(p->adsr, 0.1f * srate);
+  adsr_set_decay_rate_rt(p->adsr, 0.3f * srate);
+  adsr_set_release_rate_rt(p->adsr, 2.0f * srate);
+  adsr_set_sustain_level_rt(p->adsr, 0.8f);
 }
 
 VOICE* voice_new(uint32_t const srate) {
@@ -43,3 +50,10 @@ VOICE* voice_new(uint32_t const srate) {
   voice_init(p, srate);
   return p;
 }
+
+void voice_render_rt(VOICE *p) {
+  double env = adsr_process_rt(p->adsr);
+  p->left = osc_get_out_rt(p->osc) * env;
+  p->right = osc_get_out_rt(p->osc) * env;
+}
+

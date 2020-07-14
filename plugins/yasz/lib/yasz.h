@@ -19,9 +19,7 @@
 #define PLUGINS_YASZ_LIB_YASZ_H_
 #include <stdint.h>
 #include "lib/utils.h"
-#include "lib/osc.h"
-#include "lib/adsr.h"
-#include "lib/onepole.h"
+#include "lib/voice.h"
 
 typedef struct t_yasz {
   // yasz should have:
@@ -29,9 +27,7 @@ typedef struct t_yasz {
   //   - a global envelop configuration
   //   - an array of voices with adsr
 
-  OSC *p_osc;              // voices is osc + note + adsr?
-  ADSR *p_adsr;
-  ONEPOLE *p_onepole;
+  VOICE *voice[VOICE_MAX_VOICES];
   uint8_t noteState[128];  // this should be the voices?
 
   /* does this make any sense? */

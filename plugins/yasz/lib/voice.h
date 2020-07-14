@@ -23,14 +23,20 @@
 #include "lib/osc.h"
 #include "lib/midi.h"
 
-#define MAX_VOICES 10
+#define VOICE_MAX_VOICES 10
 
 typedef struct voice_t {
   ADSR *adsr;
   OSC  *osc;
   MIDI *midi;
+
+  double left;
+  double right;
 } VOICE;
 
-VOICE *voice_new(uint32_t const srate);
+VOICE* voice_new(uint32_t const srate);
+void voice_render_rt(VOICE *p);
+uint8_t voice_is_free(VOICE *p);  // maybe change to define
+#define voice_is_free(v) ((v->midi->notestate == NOTE_OFF) ? 1 : 0)
 
 #endif  // PLUGINS_YASZ_LIB_VOICE_H_

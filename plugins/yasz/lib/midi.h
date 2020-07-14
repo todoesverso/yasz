@@ -38,6 +38,7 @@ enum midi_status_index_from_event {
 
 typedef struct midi_t {
   uint8_t notestate;
+  uint8_t midinote;
 } MIDI;
 
 // MSB, discard channel

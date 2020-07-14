@@ -21,6 +21,7 @@
 #include "lib/midi.h"
 #include "lib/yasz.h"
 #include "lib/adsr.h"
+#include "lib/voice.h"
 
 static YASZ* yasz_malloc();
 static void yasz_init(YASZ *p, uint32_t const srate);
@@ -32,18 +33,11 @@ static YASZ* yasz_malloc() {
 }
 
 static void yasz_init(YASZ *p, uint32_t const srate) {
-  p->p_osc = osc_new(srate);
-  p->p_adsr = adsr_new();
   p->left = 0.0f;
   p->right = 0.0f;
 
-  adsr_set_attack_rate_rt(p->p_adsr, 0.1f * srate);
-  adsr_set_decay_rate_rt(p->p_adsr, 0.3f * srate);
-  adsr_set_release_rate_rt(p->p_adsr, 2.0f * srate);
-  adsr_set_sustain_level_rt(p->p_adsr, 0.8f);
-
-  for (uint32_t i = 0; i <= MIDI_NOTES; i++)
-    p->noteState[i] = NOTE_OFF;
+  for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
+    p->voice[i] = voice_new(srate);
 }
 
 YASZ* yasz_new(uint32_t srate) {
@@ -54,10 +48,36 @@ YASZ* yasz_new(uint32_t srate) {
   return p_yasz;
 }
 
-void yasz_render_rt(YASZ *p_yasz) {
-  double env = adsr_process_rt(p_yasz->p_adsr);
-  p_yasz->left = osc_get_out_rt(p_yasz->p_osc) * env;
-  p_yasz->right = osc_get_out_rt(p_yasz->p_osc) * env;
+void yazs_mixer_rt(YASZ* p) {
+  double left = 0.0f;
+  double right = 0.0f;
+  for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++) {
+    voice_render_rt(p->voice[i]);
+    left += p->voice[i]->left;
+    right += p->voice[i]->right;
+  }
+  p->left = left;
+  p->right = right;
+}
+
+void yasz_render_rt(YASZ *p) {
+  yazs_mixer_rt(p);
+}
+
+VOICE *yasz_get_free_voice(YASZ *p) {
+  for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
+    if (voice_is_free(p->voice[i]))
+      return p->voice[i];
+
+  return NULL;
+}
+
+VOICE *yasz_get_on_voice(YASZ *p, uint8_t note) {
+  for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
+    if (p->voice[i]->midi->midinote == note)
+      return p->voice[i];
+
+  return NULL;
 }
 
 void yasz_proc_midi(YASZ *p_yasz,
@@ -66,27 +86,32 @@ void yasz_proc_midi(YASZ *p_yasz,
   if (size > 3)
     return;
 
+  VOICE *p_free_voice = yasz_get_free_voice(p_yasz);
   const uint8_t status = midi_get_status_rt(data);
   const uint8_t note = midi_get_note_rt(data);
   const uint8_t velo = midi_get_note_vel_rt(data);
+  VOICE *p_voice_on = yasz_get_on_voice(p_yasz, note);
 
   switch (status) {
   case MIDI_NOTE_ON:
-    if (p_yasz->noteState[note] && velo == 0) {
-        p_yasz->noteState[note] = NOTE_OFF;
-        adsr_gate_off_rt(p_yasz->p_adsr);
+    if (p_voice_on && velo == 0) {
+        p_voice_on->midi->notestate = NOTE_OFF;
+        p_voice_on->midi->midinote = NOTE_OFF;
+        adsr_gate_off_rt(p_voice_on->adsr);
     }
 
-    if (velo > 0) {
-      p_yasz->noteState[note] = NOTE_ON;
-      osc_update_freq_from_midi_note_rt(p_yasz->p_osc, note);
-      adsr_gate_on_rt(p_yasz->p_adsr);
+    if (velo > 0 && p_free_voice) {
+      p_free_voice->midi->notestate = NOTE_ON;
+      p_free_voice->midi->midinote = note;
+      osc_update_freq_from_midi_note_rt(p_free_voice->osc, note);
+      adsr_gate_on_rt(p_free_voice->adsr);
     }
     break;
   case MIDI_NOTE_OFF:
-    if (p_yasz->noteState[note]) {
-      p_yasz->noteState[note] = NOTE_OFF;
-      adsr_gate_off_rt(p_yasz->p_adsr);
+    if (p_voice_on) {
+      p_voice_on->midi->notestate = NOTE_OFF;
+      p_voice_on->midi->midinote = NOTE_OFF;
+      adsr_gate_off_rt(p_voice_on->adsr);
     }
     break;
   }
