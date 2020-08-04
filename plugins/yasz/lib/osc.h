@@ -15,6 +15,7 @@
  */
 
 
+/// @file osc.h
 #ifndef PLUGINS_YASZ_LIB_OSC_H_
 #define PLUGINS_YASZ_LIB_OSC_H_
 
@@ -27,20 +28,50 @@
 #define TWO_PI (6.283185307179586)
 #endif
 
-
+/**
+ * @brief YASZ Oscilator Structure
+ *
+ * This is a basic oscilator structure. This same file
+ * provides several functions to interact with this structure.
+ */
 typedef struct t_osc {
-  double freq;
-  double phase;
-  double phaseinc;
-  double twopioversr;
-  uint32_t srate;
+  /*@{*/
+  double freq;        /**< frequency of the oscilator in Hz */
+  double phase;       /**< phase of the oscilator in radians */
+  double phaseinc;    /**< phase incrmenets */
+  double twopioversr; /**< constant (2*M_PI)/samplerate */
+  uint32_t srate;     /**< sample rate in Hz */
+  /*@}*/
 } OSC;
 
-OSC* osc_new(uint32_t srate);
-double osc_get_out_rt(OSC* p_osc);
-void osc_update_freq(OSC* p_osc, double newfreq);
-void osc_update_freq_from_midi_note_rt(OSC* p_osc, uint8_t note);
-void osc_update_phase(OSC *p_osc, double phase);
-void osc_update_srate(OSC *p_osc, uint32_t srate);
 
+/**
+ * Creats a new YASZ oscilator
+ * @param[in] srate The sample rate in Hz
+ * @return t_osc An allocated YASZ oscilator or NULL if no memory
+ */
+OSC* osc_new(uint32_t srate);
+
+/**
+ * Modifies the frequency of a t_osc struct
+ * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] newfreq The new frequency of the oscilator
+ */
+void osc_update_freq_rt(OSC* p_osc, double newfreq);
+
+/**
+ * Modifies the phase of a t_osc struct
+ * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] phase The new phase of the oscilator
+ */
+void osc_update_phase_rt(OSC *p_osc, double phase);
+
+/**
+ * Modifies the sample rate of a t_osc struct
+ * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] srate The new sample rate of the oscilator
+ */
+void osc_update_srate_rt(OSC *p_osc, uint32_t srate);
+
+double osc_get_out_rt(OSC* p_osc);
 #endif  // PLUGINS_YASZ_LIB_OSC_H_
