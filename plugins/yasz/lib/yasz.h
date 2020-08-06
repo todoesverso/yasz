@@ -21,6 +21,22 @@
 #include "lib/utils.h"
 #include "lib/voice.h"
 
+/**
+ * @mainpage %YASZ - Yet Another ~~Stupid~~ Simple sintesiZer
+ *
+ * Nothing fancy really, just me trying to learn.
+ *
+ * @section Coding
+ *
+ * I will expand on this later, these are just a list of design decitions
+ * that I'll keep here to remind myself to follow 
+ * (will add test for this later too).
+ *
+ * - Each ".h" must have a ".c" with the same name
+ * - All real time safe function must end with  "_rt" suffix
+ * - If a function is specific for manipulating a struct, the pointer 
+ *   to that struct must be the first parameter to pass.
+ */
 typedef struct t_yasz {
   // yasz should have:
   //   - a selected waveform enum

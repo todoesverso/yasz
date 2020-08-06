@@ -16,6 +16,9 @@
 
 #include "lib/adsr.h"
 
+/**************************
+ * Static adsr.c functions
+ **************************/ 
 static ADSR* adsr_malloc();
 static void adsr_init(ADSR *p);
 

@@ -18,16 +18,16 @@
 #include "lib/midi.h"
 
 
-static MIDI* midi_malloc();
-static void midi_init(MIDI* p);
-
+/******************************
+ * Static functions for midi.c
+ *****************************/
 static MIDI* midi_malloc() {
   MIDI* p;
   p = (MIDI*) malloc(sizeof(MIDI));  // NOLINT(readability/casting)
   return p;
 }
 
-static void midi_init(MIDI* p) {
+void midi_init_rt(MIDI* p) {
   p->notestate = NOTE_OFF;
 }
 
@@ -35,6 +35,6 @@ MIDI* midi_new() {
   MIDI* p = midi_malloc();
   if (p == NULL)
     return NULL;
-  midi_init(p);
+  midi_init_rt(p);
   return p;
 }

@@ -15,6 +15,7 @@
  */
 
 
+/** @file midi.h */
 #ifndef PLUGINS_YASZ_LIB_MIDI_H_
 #define PLUGINS_YASZ_LIB_MIDI_H_
 #include <stdint.h>
@@ -28,17 +29,25 @@
 #define MIDI_BENDER           0xe0
 
 #define MIDI_NOTES            127
-enum {NOTE_OFF, NOTE_ON};
-
-enum midi_status_index_from_event {
-  MIDI_STATUS_BYTE,
-  MIDI_NOTE_BYTE,
-  MIDI_VEL_BYTE
+enum midi_note_status {
+  NOTE_OFF, /**< Midi note off status */
+  NOTE_ON   /**< Midi note on status */
 };
 
+enum midi_status_index_from_event {
+  MIDI_STATUS_BYTE, /**< Midi's status byte */
+  MIDI_NOTE_BYTE,   /**< Midi's note byte */
+  MIDI_VEL_BYTE     /**< Midi's velocity byte */
+};
+
+/**
+ * @brief YASZ Midi data representation
+ *
+ * Very simple and functional  midi representation
+ **/
 typedef struct midi_t {
-  uint8_t notestate;
-  uint8_t midinote;
+  uint8_t notestate; /**< The state of the midi note (NOTE_OFF|NOTE_ON)*/
+  uint8_t midinote;  /**< The actual midi note */
 } MIDI;
 
 // MSB, discard channel
@@ -49,5 +58,6 @@ typedef struct midi_t {
 #define midi_to_freq_rt(x)      (440.0f*powf(2.0f, ((x)-69.f)/12.0f))
 
 MIDI *midi_new();
+void midi_init_rt(MIDI* p);
 
 #endif  // PLUGINS_YASZ_LIB_MIDI_H_

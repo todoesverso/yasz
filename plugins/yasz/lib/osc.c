@@ -18,20 +18,24 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "lib/osc.h"
-#include "lib/midi.h"
 
-
-static OSC* osc_malloc();
-static void osc_init(OSC* p_osc, uint32_t srate);
-static double osc_calc_new_phase(OSC* p_osc);
-
+/************************
+ * Static osc.c functions
+ ************************/ 
 static OSC* osc_malloc() {
   OSC* p_osc;
   p_osc = (OSC*) malloc(sizeof(OSC));  // NOLINT(readability/casting)
   return p_osc;
 }
 
-static void osc_init(OSC* p_osc, uint32_t srate) {
+static double osc_calc_new_phase_rt(OSC* p_osc) {
+  return p_osc->twopioversr * p_osc->freq;
+}
+
+/*************************
+ * Public osc.c functions
+ *************************/
+void osc_init_rt(OSC* p_osc, uint32_t srate) {
   p_osc->freq = 0.0f;
   p_osc->phase = 0.0f;
   p_osc->phaseinc = 0.0f;
@@ -39,29 +43,28 @@ static void osc_init(OSC* p_osc, uint32_t srate) {
   p_osc->twopioversr = (double)TWO_PI / srate;  // NOLINT(readability/casting)
 }
 
-static double osc_calc_new_phase(OSC* p_osc) {
-  return p_osc->twopioversr * p_osc->freq;
-}
-
 OSC* osc_new(uint32_t srate) {
   OSC* p_osc = osc_malloc();
   if (p_osc == NULL)
     return NULL;
-  osc_init(p_osc, srate);
+  osc_init_rt(p_osc, srate);
   return p_osc;
 }
 
 void osc_update_freq_rt(OSC* p_osc, double newfreq) {
   p_osc->freq = newfreq;
-  p_osc->phaseinc = osc_calc_new_phase(p_osc);
+  p_osc->phaseinc = osc_calc_new_phase_rt(p_osc);
 }
+
 void osc_update_phase_rt(OSC* p_osc, double phase) {
   p_osc->phase = phase;
 }
+
 void osc_update_srate_rt(OSC* p_osc, uint32_t srate) {
   p_osc->srate = srate;
   p_osc->twopioversr = (double)TWO_PI / srate;  // NOLINT(readability/casting)
 }
+
 double osc_get_out_rt(OSC* p_osc) {
   double val;
 

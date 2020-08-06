@@ -15,7 +15,7 @@
  */
 
 
-/// @file osc.h
+/** @file osc.h */
 #ifndef PLUGINS_YASZ_LIB_OSC_H_
 #define PLUGINS_YASZ_LIB_OSC_H_
 
@@ -35,43 +35,54 @@
  * provides several functions to interact with this structure.
  */
 typedef struct t_osc {
-  /*@{*/
   double freq;        /**< frequency of the oscilator in Hz */
   double phase;       /**< phase of the oscilator in radians */
   double phaseinc;    /**< phase incrmenets */
-  double twopioversr; /**< constant (2*M_PI)/samplerate */
+  double twopioversr; /**< constant (TWO_PI)/samplerate @see TWO_PI */
   uint32_t srate;     /**< sample rate in Hz */
-  /*@}*/
 } OSC;
 
-
 /**
- * Creats a new YASZ oscilator
+ * Creates a new oscilator
  * @param[in] srate The sample rate in Hz
- * @return t_osc An allocated YASZ oscilator or NULL if no memory
+ * @return t_osc An allocated oscilator or NULL if no memory
  */
 OSC* osc_new(uint32_t srate);
 
 /**
+ * Resets an oscilator
+ * @param[in] p_osc Pointer to an oscilator
+ * @param[in] srate The sample rate in Hz
+ */
+void osc_init_rt(OSC* p_osc, uint32_t srate);
+
+/**
  * Modifies the frequency of a t_osc struct
- * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] p_osc Pointer to an oscilator
  * @param[in] newfreq The new frequency of the oscilator
  */
 void osc_update_freq_rt(OSC* p_osc, double newfreq);
 
 /**
  * Modifies the phase of a t_osc struct
- * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] p_osc Pointer to a oscilator
  * @param[in] phase The new phase of the oscilator
  */
 void osc_update_phase_rt(OSC *p_osc, double phase);
 
 /**
  * Modifies the sample rate of a t_osc struct
- * @param[in] p_osc Pointer to a YASZ oscilator
+ * @param[in] p_osc Pointer to an oscilator
  * @param[in] srate The new sample rate of the oscilator
  */
 void osc_update_srate_rt(OSC *p_osc, uint32_t srate);
 
+/**
+ * Generates the output of the oscilator and increases the phase
+ * accordingly 
+ *
+ * @param[in] p_osc Pointer to an oscilator
+ * @return double the current value of the oscilator
+ */
 double osc_get_out_rt(OSC* p_osc);
 #endif  // PLUGINS_YASZ_LIB_OSC_H_

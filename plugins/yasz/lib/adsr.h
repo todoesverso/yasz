@@ -61,7 +61,6 @@ void adsr_set_release_rate_rt(ADSR *p_adsr, double rate);
 void adsr_set_target_ratio_a_rt(ADSR *p_adsr, double rate);
 void adsr_set_target_ratio_dr_rt(ADSR *p_adsr, double rate);
 void adsr_set_sustain_level_rt(ADSR *p_adsr, double level);
-void adsr_set_attack_rate_rt(ADSR *p_adsr, double rate);
 
 #define DBMIN180 (0.000000001)  // -180dB
 #define adsr_calc_coef_rt(r, tr) ((r <= 0) ? 0.0 : exp(-log((1.0 + tr) / tr) / r))  // NOLINT(whitespace/line_length)
