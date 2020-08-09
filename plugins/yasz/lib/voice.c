@@ -32,6 +32,7 @@ static VOICE* voice_malloc() {
 
 static void voice_init(VOICE* p, uint32_t const srate) {
   p->osc = osc_new(srate);
+  osc_update_wavetype_rt(p->osc, YASZ_TRIANGLE);
   p->adsr = adsr_new();
   p->midi = midi_new();
   p->left = 0.0f;

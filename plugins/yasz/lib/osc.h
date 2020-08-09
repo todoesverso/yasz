@@ -22,11 +22,32 @@
 #include <math.h>
 #include <stdint.h>
 #ifndef M_PI
-#define M_PI (3.141592653589793)
+#define M_PI (3.14159265358979323846)
+#endif
+#ifndef M_1_PI
+#define M_1_PI (0.31830988618379067154)
 #endif
 #ifndef TWO_PI
-#define TWO_PI (6.283185307179586)
+#define TWO_PI (6.28318530717958623199)
 #endif
+#ifndef M_1_TWO_PI
+#define M_1_TWO_PI (0.15915494309189534560)
+#endif
+
+#define UPDATE_PHASE(p) { p->phase += p->phaseinc; \
+                          if (p->phase >= TWO_PI)  \
+                            p->phase -= TWO_PI;    \
+                          if (p->phase < 0.0)      \
+                            p->phase += TWO_PI;    \
+                        }
+
+enum wave_types {
+  YASZ_SINE,
+  YASZ_SQUARE,
+  YASZ_SAW_UP,
+  YASZ_SAW_DOWN,
+  YASZ_TRIANGLE
+};
 
 /**
  * @brief YASZ Oscilator Structure
@@ -40,6 +61,7 @@ typedef struct t_osc {
   double phaseinc;    /**< phase incrmenets */
   double twopioversr; /**< constant (TWO_PI)/samplerate @see TWO_PI */
   uint32_t srate;     /**< sample rate in Hz */
+  uint8_t wavetype;       /**< wave type see wave_types */
 } OSC;
 
 /**
@@ -76,6 +98,7 @@ void osc_update_phase_rt(OSC *p_osc, double phase);
  * @param[in] srate The new sample rate of the oscilator
  */
 void osc_update_srate_rt(OSC *p_osc, uint32_t srate);
+void osc_update_wavetype_rt(OSC *p_osc, uint8_t wavetype);
 
 /**
  * Generates the output of the oscilator and increases the phase

@@ -32,6 +32,94 @@ static double osc_calc_new_phase_rt(OSC* p_osc) {
   return p_osc->twopioversr * p_osc->freq;
 }
 
+/* WAVE types */
+static double osc_sine_rt(OSC* p_osc) {
+  double val = sin(p_osc->phase);
+  UPDATE_PHASE(p_osc);
+  return val;
+}
+
+static double osc_square_rt(OSC* p_osc) {
+  double val = (p_osc->phase <= M_PI) ? 1 : 0;
+  UPDATE_PHASE(p_osc);
+  return val;
+}
+
+static double osc_triangle_rt(OSC* p_osc) {
+  double val = (2.0 * (p_osc->phase * (M_1_TWO_PI))) - 1.0;
+  if (val < 0.0)
+    val = -val;
+  val = 2.0 * (val - 0.5);
+  UPDATE_PHASE(p_osc);
+  return val;
+}
+
+static double osc_saw_down_rt(OSC* p_osc) {
+  double val = 1.0 - 2.0 * (p_osc->phase * (M_1_TWO_PI));
+  UPDATE_PHASE(p_osc);
+  return val;
+}
+
+static double osc_saw_up_rt(OSC* p_osc) {
+  double val = (2.0 * (p_osc->phase * (M_1_TWO_PI))) - 1.0;
+  UPDATE_PHASE(p_osc);
+  return val;
+}
+
+static double calc_harmonics(OSC* p) {
+  uint32_t nharm = (uint32_t)(p->srate / (2*p->freq));
+  //printf("%i\n", nharm);
+  double ampfac = 1.0;
+  double freqfac = 1.0;
+  double ampadjust = 0.0;
+  double val = 0.0;
+
+  for(uint32_t i = 0; i < nharm; i++) {
+    ampfac = 1.0 / freqfac;
+    //ampfac = 1.0 / (freqfac * freqfac);
+    ampadjust += ampfac;
+    val += sin(p->phase * freqfac) * ampfac ;
+    freqfac += 1.0;
+  }
+
+  return val;
+}
+static double osc_square2_rt(OSC* p_osc) {
+
+double p = p_osc->phase ;      //current position
+double dp=1.0f;     //change in postion per sample
+double pmax;        //maximum position
+double x;           //position in sinc function
+double leak=0.995f; //leaky integrator
+double dc;          //dc offset
+double saw;         //output
+
+  pmax = 0.5f * p_osc->srate / p_osc->freq;
+  dc = -0.498f/pmax;
+
+  p += dp;
+  if(p < 0.0f)
+  {
+    p = -p;
+    dp = -dp;
+  }
+  else if(p > pmax)
+  {
+    p = pmax + pmax - p;
+    dp = -dp;
+  }
+
+  x = M_PI * p;
+  if(x < 0.00001f)
+     x=0.00001f; //don't divide by 0
+
+  saw = (dc + (double)sin(x)/(x)) * leak;
+
+
+  UPDATE_PHASE(p_osc);
+  return saw;
+}
+
 /*************************
  * Public osc.c functions
  *************************/
@@ -60,6 +148,10 @@ void osc_update_phase_rt(OSC* p_osc, double phase) {
   p_osc->phase = phase;
 }
 
+void osc_update_wavetype_rt(OSC* p_osc, uint8_t wavetype) {
+  p_osc->wavetype = wavetype;
+}
+
 void osc_update_srate_rt(OSC* p_osc, uint32_t srate) {
   p_osc->srate = srate;
   p_osc->twopioversr = (double)TWO_PI / srate;  // NOLINT(readability/casting)
@@ -68,12 +160,23 @@ void osc_update_srate_rt(OSC* p_osc, uint32_t srate) {
 double osc_get_out_rt(OSC* p_osc) {
   double val;
 
-  val = sin(p_osc->phase);
-  p_osc->phase += p_osc->phaseinc;
-  if (p_osc->phase >= TWO_PI)
-    p_osc->phase -= TWO_PI;
-  if (p_osc->phase < 0.0)
-    p_osc->phase += TWO_PI;
+  switch(p_osc->wavetype) {
+    case (YASZ_SQUARE):
+      val = osc_square_rt(p_osc);
+      break;
+    case (YASZ_SAW_UP):
+      val = osc_saw_up_rt(p_osc);
+      break;
+    case (YASZ_SAW_DOWN):
+      val = osc_saw_down_rt(p_osc);
+      break;
+    case (YASZ_TRIANGLE):
+      val = osc_triangle_rt(p_osc);
+      break;
+    default:
+      val = osc_sine_rt(p_osc);
+      break;
+  }
 
   return val;
 }
