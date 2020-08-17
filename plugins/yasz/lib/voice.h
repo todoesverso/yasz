@@ -36,6 +36,7 @@ typedef struct voice_t {
 
 VOICE* voice_new(uint32_t const srate);
 void voice_render_rt(VOICE *p);
+void voice_freq_rt(VOICE *p, double freq);
 uint8_t voice_is_free(VOICE *p);  // maybe change to define
 #define voice_is_free(v) ((v->midi->notestate == NOTE_OFF) ? 1 : 0)
 

@@ -58,3 +58,6 @@ void voice_render_rt(VOICE *p) {
   p->right = osc_get_out_rt(p->osc) * env;
 }
 
+void voice_freq_rt(VOICE *p, double freq) {
+  osc_update_freq_rt(p->osc, freq);
+}

@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "lib/osc.h"
 #include "lib/midi.h"
 #include "lib/yasz.h"
 #include "lib/adsr.h"
@@ -104,7 +103,7 @@ void yasz_proc_midi(YASZ *p_yasz,
       p_free_voice->midi->notestate = NOTE_ON;
       p_free_voice->midi->midinote = note;
       double freq = midi_to_freq_rt(note);
-      osc_update_freq_rt(p_free_voice->osc, freq);
+      voice_freq_rt(p_free_voice, freq);
       adsr_gate_on_rt(p_free_voice->adsr);
     }
     break;
