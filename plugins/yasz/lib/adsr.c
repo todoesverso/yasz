@@ -14,7 +14,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "lib/adsr.h"
+#include "adsr.h"
 
 /**************************
  * Static adsr.c functions

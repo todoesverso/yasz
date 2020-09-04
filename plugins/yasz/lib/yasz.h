@@ -18,8 +18,8 @@
 #ifndef PLUGINS_YASZ_LIB_YASZ_H_
 #define PLUGINS_YASZ_LIB_YASZ_H_
 #include <stdint.h>
-#include "lib/utils.h"
-#include "lib/voice.h"
+#include "utils.h"
+#include "voice.h"
 
 /**
  * @mainpage %YASZ - Yet Another ~~Stupid~~ Simple sintesiZer

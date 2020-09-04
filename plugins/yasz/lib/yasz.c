@@ -17,10 +17,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "lib/midi.h"
-#include "lib/yasz.h"
-#include "lib/adsr.h"
-#include "lib/voice.h"
+#include "midi.h"
+#include "yasz.h"
+#include "adsr.h"
+#include "voice.h"
 
 static YASZ* yasz_malloc();
 static void yasz_init(YASZ *p, uint32_t const srate);

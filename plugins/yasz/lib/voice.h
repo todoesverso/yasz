@@ -19,15 +19,15 @@
 #define PLUGINS_YASZ_LIB_VOICE_H_
 
 #include <stdint.h>
-#include "lib/adsr.h"
-#include "lib/osc.h"
-#include "lib/midi.h"
+#include "adsr.h"
+#include "osct.h"
+#include "midi.h"
 
 #define VOICE_MAX_VOICES 10
 
 typedef struct voice_t {
   ADSR *adsr;
-  OSC  *osc;
+  OSCT *osct;
   MIDI *midi;
 
   double left;

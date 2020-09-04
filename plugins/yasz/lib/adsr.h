@@ -20,8 +20,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
-#include "lib/utils.h"
-#include "lib/osc.h"
+#include "utils.h"
+#include "osct.h"
 
 enum envstate {
   IDLE,

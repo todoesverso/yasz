@@ -15,10 +15,10 @@
  */
 
 #include <stdlib.h>
-#include "lib/midi.h"
-#include "lib/osc.h"
-#include "lib/adsr.h"
-#include "lib/voice.h"
+#include "midi.h"
+#include "osct.h"
+#include "adsr.h"
+#include "voice.h"
 
 
 static VOICE* voice_malloc();
@@ -31,8 +31,8 @@ static VOICE* voice_malloc() {
 }
 
 static void voice_init(VOICE* p, uint32_t const srate) {
-  p->osc = osc_new(srate);
-  osc_update_wavetype_rt(p->osc, YASZ_TRIANGLE);
+  p->osct = osct_new(srate, 0);
+  osct_wavetype_rt(p->osct, YASZ_TRIANGLE_T);
   p->adsr = adsr_new();
   p->midi = midi_new();
   p->left = 0.0f;
@@ -54,10 +54,10 @@ VOICE* voice_new(uint32_t const srate) {
 
 void voice_render_rt(VOICE *p) {
   double env = adsr_process_rt(p->adsr);
-  p->left = osc_get_out_rt(p->osc) * env;
-  p->right = osc_get_out_rt(p->osc) * env;
+  p->left = osct_get_out_rt(p->osct) * env;
+  p->right = osct_get_out_rt(p->osct) * env;
 }
 
 void voice_freq_rt(VOICE *p, double freq) {
-  osc_update_freq_rt(p->osc, freq);
+  osct_freq_rt(p->osct, freq);
 }
