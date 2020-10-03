@@ -21,36 +21,9 @@
 
 #include <math.h>
 #include <stdint.h>
+#include "utils.h"
+#include "wave.h"
 
-#ifndef M_PI
-#define M_PI (3.14159265358979323846)
-#endif
-#ifndef M_1_PI
-#define M_1_PI (0.31830988618379067154)
-#endif
-#ifndef TWO_PI
-#define TWO_PI (6.28318530717958623199)
-#endif
-#ifndef M_1_TWO_PI
-#define M_1_TWO_PI (0.15915494309189534560)
-#endif
-
-#define DEFAULT_TLEN (512)
-#define NHARMS (12)
-
-#define UPDATE_PHASE(p) { p->phase += p->phaseinc; \
-                          if (p->phase >= TWO_PI)  \
-                            p->phase -= TWO_PI;    \
-                          if (p->phase < 0.0)      \
-                            p->phase += TWO_PI;    \
-                        }
-
-enum wave_types_t {
-  YASZ_SINE_T,
-  YASZ_SQUARE_T,
-  YASZ_SAW_T,
-  YASZ_TRIANGLE_T
-};
 
 /**
  * @brief YASZ Oscilator Structure
@@ -59,33 +32,31 @@ enum wave_types_t {
  * provides several functions to interact with this structure.
  */
 typedef struct t_osct {
-  double freq;        /**< frequency of the oscilator in Hz */
-  double phase;       /**< phase of the oscilator in radians */
-  double phaseinc;    /**< phase incrmenets */
-  //double **ttable;     /**< ppointer to table lookup */
-  double (*ttable)[2048 + 1];     /**< ppointer to table lookup */
-  double* table;      /**< pointer to table lookup */
-  double tlenoversr;  /**< constant (table length)/samplerate */
-  uint16_t tlen;      /**< lookup table length */
-  uint16_t harmonics; /**< numbers of harmonics to render */
-  uint32_t srate;     /**< sample rate in Hz */
-  uint8_t wavetype;   /**< wave type see wave_types */
+  double freq;                /**< frequency of the oscilator in Hz */
+  double phase;               /**< phase of the oscilator in radians */
+  double phaseinc;            /**< phase increments */
+  double (*ttable)[TLEN + 1]; /**< ppointer to table lookup */
+  double* table;              /**< pointer to table lookup */
+  double tlenoversr;          /**< constant (table length)/samplerate */
+  uint16_t tlen;              /**< lookup table length */
+  uint16_t harmonics;         /**< numbers of harmonics to render */
+  uint32_t srate;             /**< sample rate in Hz */
+  uint8_t wavetype;           /**< wave type see wave_types */
 } OSCT;
 
 /**
  * Creates a new oscilator
  * @param[in] srate The sample rate in Hz
- * @param[in] tlen  Lookup table length
  * @return t_osc An allocated oscilator or NULL if no memory
  */
-OSCT* osct_new(uint32_t srate, uint16_t tlen);
+OSCT* osct_new(uint32_t srate);
 
 /**
  * Resets an oscilator
  * @param[in] p_osc Pointer to an oscilator
  * @param[in] srate The sample rate in Hz
  */
-void osct_init_rt(OSCT* p, uint32_t srate, uint16_t tlen);
+void osct_init_rt(OSCT* p, uint32_t srate);
 
 /**
  * Modifies the frequency of a t_osc struct
@@ -107,7 +78,30 @@ void osct_phase_rt(OSCT* p, double phase);
  * @param[in] srate The new sample rate of the oscilator
  */
 void osct_srate_rt(OSCT* p, uint32_t srate);
-void osct_wavetype_rt(OSCT* p, uint8_t wavetype);
+
+/**
+ * Modifies the wavetype to a sine
+ * @param[in] p_osc Pointer to an oscilator
+ */
+void osct_wavetype_sine_rt(OSCT* p);
+
+/**
+ * Modifies the wavetype to a square
+ * @param[in] p_osc Pointer to an oscilator
+ */
+void osct_wavetype_square_rt(OSCT* p);
+
+/**
+ * Modifies the wavetype to a triangle
+ * @param[in] p_osc Pointer to an oscilator
+ */
+void osct_wavetype_triangle_rt(OSCT* p);
+
+/**
+ * Modifies the wavetype to a saw
+ * @param[in] p_osc Pointer to an oscilator
+ */
+void osct_wavetype_saw_rt(OSCT* p);
 
 /**
  * Generates the output of the oscilator and increases the phase
