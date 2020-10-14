@@ -102,7 +102,7 @@ void yasz_proc_midi(YASZ *p_yasz,
     if (velo > 0 && p_free_voice) {
       p_free_voice->midi->notestate = NOTE_ON;
       p_free_voice->midi->midinote = note;
-      double freq = midi_to_freq_rt(note);
+      double freq = midi_to_freq[note];
       voice_freq_rt(p_free_voice, freq);
       adsr_gate_on_rt(p_free_voice->adsr);
     }

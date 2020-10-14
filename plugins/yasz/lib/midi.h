@@ -60,4 +60,5 @@ typedef struct midi_t {
 MIDI *midi_new();
 void midi_init_rt(MIDI* p);
 
+extern const double midi_to_freq[MIDI_NOTES + 1];
 #endif  // PLUGINS_YASZ_LIB_MIDI_H_

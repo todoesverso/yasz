@@ -15,11 +15,11 @@ Yet Another ~~Stupid~~ Simple synthesiZer
 - [ ] Fix CI
 - [ ] Package it?
 - [ ] Karplus–Strong string synthesis...
-- [ ] Midi to freq lookup table
 
 ### In progress
  
 ### Completed 
 - [x] Add TODO.md
+- [x] Midi to freq lookup table
 
 

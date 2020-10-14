@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include <math.h>
 #include "wave.h"
+#include "utils.h"
 
 uint8_t tables_initialized = 0;
 
