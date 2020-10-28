@@ -27,17 +27,29 @@
 
 typedef struct voice_t {
   ADSR *adsr;
-  OSCT *osct;
+  OSCT *sub;
+  OSCT *osct1;
+  OSCT *osct2;
   MIDI *midi;
 
+  float sub_gain;
+  float osct1_gain;
+  float osct2_gain;
+  double kswt[48000];
   double left;
   double right;
+  double srate;
 } VOICE;
 
 VOICE* voice_new(uint32_t const srate);
 void voice_render_rt(VOICE *p);
 void voice_freq_rt(VOICE *p, double freq);
-//uint8_t voice_is_free(VOICE *p);  // maybe change to define
+void voice_osct1_gain_rt(VOICE *p, float gain);
+void voice_osct2_gain_rt(VOICE *p, float gain);
+void voice_sub_gain_rt(VOICE *p, float gain);
+void voice_sub_wavetype_rt(VOICE *p, uint8_t wt);
+void voice_osct1_wavetype_rt(VOICE *p, uint8_t wt);
+void voice_osct2_wavetype_rt(VOICE *p, uint8_t wt);
 #define voice_is_free(v) ((v->midi->notestate == NOTE_OFF) ? 1 : 0)
 
 #endif  // PLUGINS_YASZ_LIB_VOICE_H_

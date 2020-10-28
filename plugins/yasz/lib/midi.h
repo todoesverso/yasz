@@ -50,12 +50,12 @@ typedef struct midi_t {
   uint8_t midinote;  /**< The actual midi note */
 } MIDI;
 
+
 // MSB, discard channel
 #define midi_get_status_rt(x)   (x[MIDI_STATUS_BYTE] & 0xF0)
 #define midi_get_note_rt(x)     (x[MIDI_NOTE_BYTE])
 #define midi_get_note_vel_rt(x) (x[MIDI_VEL_BYTE])
-// maybe convert to fixed lookup table?
-#define midi_to_freq_rt(x)      (440.0f*powf(2.0f, ((x)-69.f)/12.0f))
+#define midi_to_freq_rt(x,b)    (b*powf(2.0f, ((x)-69.f)*0.083333333))
 
 MIDI *midi_new();
 void midi_init_rt(MIDI* p);

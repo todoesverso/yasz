@@ -1,5 +1,5 @@
 /*
- * YASZ (Yet Another Simple synthesiZer)
+ * YASS (Yet Another Simple Synthesizer)
  * Copyright (C) 2020 Victor Rosales <todoesverso@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
@@ -15,23 +15,14 @@
  */
 
 
-/** @file wave.h */
-#ifndef PLUGINS_YASZ_LIB_WAVE_H_
-#define PLUGINS_YASZ_LIB_WAVE_H_
+#ifndef PLUGINS_YASZ_LIB_COMMON_H_
+#define PLUGINS_YASZ_LIB_COMMON_H_
 
-#include <stdint.h>
-#include <math.h>
+enum wave_types_t {
+  YASZ_SINE_T,
+  YASZ_SQUARE_T,
+  YASZ_SAW_T,
+  YASZ_TRIANGLE_T
+};
 
-#define HARMONICS (128)
-#define TLEN (2048)
-#define MAX_FREQ (8000)
-
-extern uint8_t tables_initialized;
-
-extern double yasz_square_t[HARMONICS][TLEN + 1];
-extern double yasz_triangle_t[HARMONICS][TLEN + 1];
-extern double yasz_saw_t[HARMONICS][TLEN + 1];
-#define yasz_sine_t (yasz_square_t)
-
-void lookup_init_rt();
-#endif  // PLUGINS_YASZ_LIB_WAVE_H_
+#endif  // PLUGINS_YASZ_LIB_COMMON_H_

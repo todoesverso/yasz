@@ -20,6 +20,7 @@
 #include <math.h>
 #include "osct.h"
 #include "wave.h"
+#include "common.h"
 
 
 /************************
@@ -54,24 +55,6 @@ static double osct_render_rt(OSCT* p) {
     p->phase += p->tlen;
 
   return val;
-}
-
-static void osct_wavetype_rt(OSCT* p, uint8_t wavetype) {
-  p->wavetype = wavetype;
-  switch (p->wavetype) {
-    case (YASZ_SQUARE_T): 
-      p->ttable = yasz_square_t;
-      break;
-    case (YASZ_SINE_T): 
-      p->ttable = yasz_sine_t;
-      break;
-    case (YASZ_SAW_T): 
-      p->ttable = yasz_saw_t;
-      break;
-    case (YASZ_TRIANGLE_T): 
-      p->ttable = yasz_triangle_t;
-      break;
-  }
 }
 
 
@@ -129,6 +112,25 @@ void osct_srate_rt(OSCT* p, uint32_t srate) {
 
 double osct_get_out_rt(OSCT* p) {
   return osct_render_rt(p);
+}
+
+void osct_wavetype_rt(OSCT* p, uint8_t wavetype) {
+
+  p->wavetype = wavetype;
+  switch (p->wavetype) {
+    case (YASZ_SQUARE_T): 
+      p->ttable = yasz_square_t;
+      break;
+    case (YASZ_SAW_T): 
+      p->ttable = yasz_saw_t;
+      break;
+    case (YASZ_TRIANGLE_T): 
+      p->ttable = yasz_triangle_t;
+      break;
+    default: // (YASZ_SINE_T)
+      p->ttable = yasz_sine_t;
+      break;
+  }
 }
 
 void osct_wavetype_sine_rt(OSCT* p) {

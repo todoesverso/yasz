@@ -104,6 +104,13 @@ void osct_wavetype_triangle_rt(OSCT* p);
 void osct_wavetype_saw_rt(OSCT* p);
 
 /**
+ * Modifies the wavetype
+ * @param[in] p  Pointer to an oscilator
+ * @param[in] wt Wavetype
+ */
+void osct_wavetype_rt(OSCT* p, uint8_t wt);
+
+/**
  * Generates the output of the oscilator and increases the phase
  * accordingly 
  *
