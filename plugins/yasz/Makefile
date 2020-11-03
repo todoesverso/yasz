@@ -17,7 +17,9 @@ FILES_DSP = \
 	lib/onepole.c  \
 	lib/osc.c lib/utils.c  \
 	lib/yasz.c lib/adsr.c  \
-	lib/midi.c lib/voice.c lib/osct.c lib/wave.c
+	lib/midi.c lib/voice.c \
+	lib/osct.c lib/wave.c \
+	lib/ks.c
 
 
 FILES_UI  = \

@@ -22,6 +22,7 @@
 #include "adsr.h"
 #include "osct.h"
 #include "midi.h"
+#include "ks.h"
 
 #define VOICE_MAX_VOICES 10
 
@@ -31,11 +32,14 @@ typedef struct voice_t {
   OSCT *osct1;
   OSCT *osct2;
   MIDI *midi;
+  KS   *ks;
+  KS   *ks1;
+  KS   *ks2;
 
   float sub_gain;
   float osct1_gain;
   float osct2_gain;
-  double kswt[48000];
+  float ks_gain;
   double left;
   double right;
   double srate;
@@ -47,6 +51,7 @@ void voice_freq_rt(VOICE *p, double freq);
 void voice_osct1_gain_rt(VOICE *p, float gain);
 void voice_osct2_gain_rt(VOICE *p, float gain);
 void voice_sub_gain_rt(VOICE *p, float gain);
+void voice_ks_gain_rt(VOICE *p, float gain);
 void voice_sub_wavetype_rt(VOICE *p, uint8_t wt);
 void voice_osct1_wavetype_rt(VOICE *p, uint8_t wt);
 void voice_osct2_wavetype_rt(VOICE *p, uint8_t wt);

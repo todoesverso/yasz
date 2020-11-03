@@ -19,6 +19,7 @@
 #include "osct.h"
 #include "adsr.h"
 #include "voice.h"
+#include "ks.h"
 #include "common.h"
 
 
@@ -33,14 +34,18 @@ static void voice_init(VOICE* p, uint32_t const srate) {
   p->sub = osct_new(srate);
   p->osct1 = osct_new(srate);
   p->osct2 = osct_new(srate);
+  p->ks = ks_new(srate);
+  p->ks1 = ks_new(srate);
+  p->ks2 = ks_new(srate);
   voice_sub_wavetype_rt(p, YASZ_SINE_T);
   voice_osct1_wavetype_rt(p, YASZ_SAW_T);
   voice_osct2_wavetype_rt(p, YASZ_TRIANGLE_T);
   p->adsr = adsr_new();
   p->midi = midi_new();
-  p->sub_gain = 0.3f;
-  p->osct1_gain = 1.0f;
-  p->osct2_gain = 1.0f;
+  p->sub_gain = 0.6f;
+  p->osct1_gain = 0.4f;
+  p->osct2_gain = 0.3f;
+  p->ks_gain = 0.2f;
   p->left = 0.0f;
   p->right = 0.0f;
 
@@ -75,6 +80,14 @@ static inline double voice_osct_render_rt(VOICE *p) {
     osct_get_out_rt(p->sub) * p->sub_gain;
 }
 
+static inline void voice_ks_render_rt(VOICE *p) {
+  double base_ks = ks_render_rt(p->ks);
+  p->left += (base_ks +
+              ks_render_rt(p->ks1)) * p->ks_gain;
+  p->right += (base_ks +
+               ks_render_rt(p->ks2)) * p->ks_gain;
+}
+
 VOICE* voice_new(uint32_t const srate) {
   VOICE* p = voice_malloc();
   if (p == NULL)
@@ -87,6 +100,7 @@ void voice_render_rt(VOICE *p) {
   double env = adsr_process_rt(p->adsr);
   p->left = voice_osct_render_rt(p) * env;
   p->right = voice_osct_render_rt(p) * env;
+  voice_ks_render_rt(p);
 }
 
 void voice_sub_gain_rt(VOICE *p, float gain) {
@@ -101,10 +115,17 @@ void voice_osct2_gain_rt(VOICE *p, float gain) {
   p->osct2_gain = gain;
 }
 
+void voice_ks_gain_rt(VOICE *p, float gain) {
+  p->ks_gain = gain;
+}
+
 void voice_freq_rt(VOICE *p, double freq) {
-  osct_freq_rt(p->sub, freq*0.25f);
+  osct_freq_rt(p->sub, freq * 0.25f);
   osct_freq_rt(p->osct1, freq);
   osct_freq_rt(p->osct2, freq);
+  ks_freq_rt(p->ks, freq);
+  ks_freq_rt(p->ks2, freq + 1.f);
+  ks_freq_rt(p->ks1, freq - 1.f);
 }
 
 void voice_sub_wavetype_rt(VOICE *p, uint8_t wavetype) {

@@ -14,12 +14,12 @@ Yet Another ~~Stupid~~ Simple synthesiZer
 - [ ] Add tests
 - [ ] Fix CI
 - [ ] Package it?
-- [ ] Karplus–Strong string synthesis...
 
 ### In progress
  
 ### Completed 
 - [x] Add TODO.md
 - [x] Midi to freq lookup table
+- [x] Karplus–Strong string synthesis
 
 
