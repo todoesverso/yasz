@@ -45,8 +45,9 @@ adsr_init(ADSR* p) {
 ADSR*
 adsr_new() {
     ADSR* p = adsr_malloc();
-    if (p == NULL)
-    { return NULL; }
+    if (p == NULL) {
+        return NULL;
+    }
     adsr_init(p);
     return p;
 }

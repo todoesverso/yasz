@@ -52,8 +52,9 @@ osc_square_rt(OSC* p_osc) {
 static double
 osc_triangle_rt(OSC* p_osc) {
     double val = (2.0 * (p_osc->phase * (M_1_TWO_PI))) - 1.0;
-    if (val < 0.0)
-    { val = -val; }
+    if (val < 0.0) {
+        val = -val;
+    }
     val = 2.0 * (val - 0.5);
     UPDATE_PHASE(p_osc);
     return val;
@@ -88,8 +89,9 @@ osc_init_rt(OSC* p_osc, uint32_t srate) {
 OSC*
 osc_new(uint32_t srate) {
     OSC* p_osc = osc_malloc();
-    if (p_osc == NULL)
-    { return NULL; }
+    if (p_osc == NULL) {
+        return NULL;
+    }
     osc_init_rt(p_osc, srate);
     return p_osc;
 }

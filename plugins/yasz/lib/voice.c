@@ -99,8 +99,9 @@ voice_ks_render_rt(VOICE* p) {
 VOICE*
 voice_new(uint32_t const srate) {
     VOICE* p = voice_malloc();
-    if (p == NULL)
-    { return NULL; }
+    if (p == NULL) {
+        return NULL;
+    }
     voice_init(p, srate);
     return p;
 }

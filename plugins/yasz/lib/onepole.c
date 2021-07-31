@@ -37,8 +37,9 @@ onepole_init(ONEPOLE* p, double freq) {
 ONEPOLE*
 onepole_new(double freq) {
     ONEPOLE* p = onepole_malloc();
-    if (p == NULL)
-    { return NULL; }
+    if (p == NULL) {
+        return NULL;
+    }
     onepole_init(p, freq);
     return p;
 }

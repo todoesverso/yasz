@@ -37,15 +37,17 @@ yasz_init(YASZ* p, uint32_t const srate) {
     p->left = 0.0f;
     p->right = 0.0f;
 
-    for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
-    { p->voice[i] = voice_new(srate); }
+    for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++) {
+        p->voice[i] = voice_new(srate);
+    }
 }
 
 YASZ*
 yasz_new(uint32_t srate) {
     YASZ* p_yasz = yasz_malloc();
-    if (p_yasz == NULL)
-    { return NULL; }
+    if (p_yasz == NULL) {
+        return NULL;
+    }
     yasz_init(p_yasz, srate);
     return p_yasz;
 }
@@ -71,8 +73,9 @@ yasz_render_rt(YASZ* p) {
 VOICE*
 yasz_get_free_voice(YASZ* p) {
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
-        if (voice_is_free(p->voice[i]))
-        { return p->voice[i]; }
+        if (voice_is_free(p->voice[i])) {
+            return p->voice[i];
+        }
 
     return NULL;
 }
@@ -80,8 +83,9 @@ yasz_get_free_voice(YASZ* p) {
 VOICE*
 yasz_get_on_voice(YASZ* p, uint8_t note) {
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
-        if (p->voice[i]->midi->midinote == note)
-        { return p->voice[i]; }
+        if (p->voice[i]->midi->midinote == note) {
+            return p->voice[i];
+        }
 
     return NULL;
 }
@@ -90,8 +94,9 @@ void
 yasz_proc_midi(YASZ* p_yasz,
                const uint8_t size,
                const uint8_t* const data) {
-    if (size > 3)
-    { return; }
+    if (size > 3) {
+        return;
+    }
 
     VOICE* p_free_voice = yasz_get_free_voice(p_yasz);
     const uint8_t status = midi_get_status_rt(data);

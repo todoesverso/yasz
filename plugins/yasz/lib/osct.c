@@ -53,10 +53,12 @@ static double
 osct_render_rt(OSCT* p) {
     double val = interpolate(p);
     p->phase += p->phaseinc;
-    while (p->phase >= p->tlen)
-    { p->phase -= p->tlen; }
-    while (p->phase < 0.0)
-    { p->phase += p->tlen; }
+    while (p->phase >= p->tlen) {
+        p->phase -= p->tlen;
+    }
+    while (p->phase < 0.0) {
+        p->phase += p->tlen;
+    }
 
     return val;
 }
@@ -70,8 +72,9 @@ osct_init_rt(OSCT* p, uint32_t srate) {
     lookup_init_rt();
     p->tlen = TLEN;
     p->harmonics = 0;
-    for (uint16_t i = 0; i <= p->tlen; i++)
-    { p->table[i] = 0.0f; }
+    for (uint16_t i = 0; i <= p->tlen; i++) {
+        p->table[i] = 0.0f;
+    }
     p->freq = 0.0f;
     p->phase = 0.0f;
     p->phaseinc = 0.0f;
@@ -83,8 +86,9 @@ osct_init_rt(OSCT* p, uint32_t srate) {
 OSCT*
 osct_new(uint32_t srate) {
     OSCT* p = osct_malloc();
-    if (p == NULL)
-    { return NULL; }
+    if (p == NULL) {
+        return NULL;
+    }
     p->table = (double*) malloc((TLEN + 1) * sizeof(double));
     if (p->table == NULL) {
         free(p);
@@ -99,11 +103,13 @@ void
 osct_freq_rt(OSCT* p, double newfreq) {
     p->freq = newfreq;
     uint16_t harmonic = MAX_FREQ /  p->freq - 1.0;
-    if (harmonic >= HARMONICS)
-    { harmonic = HARMONICS - 1; }
+    if (harmonic >= HARMONICS) {
+        harmonic = HARMONICS - 1;
+    }
     p->harmonics = harmonic;
-    if (p->wavetype == YASZ_SINE_T)
-    { harmonic = 0; }
+    if (p->wavetype == YASZ_SINE_T) {
+        harmonic = 0;
+    }
     p->table = p->ttable[harmonic];
     p->phaseinc = osct_calc_new_phase_rt(p);
 }

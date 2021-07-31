@@ -36,8 +36,9 @@ midi_init_rt(MIDI* p) {
 MIDI*
 midi_new() {
     MIDI* p = midi_malloc();
-    if (p == NULL)
-    { return NULL; }
+    if (p == NULL) {
+        return NULL;
+    }
     midi_init_rt(p);
     return p;
 }

@@ -35,8 +35,9 @@ normalize_rt(double* t) {
 
     for (i = 0; i < TLEN; i++) {
         val = fabs(t[i]);
-        if (maxamp < val)
-        { maxamp = val; }
+        if (maxamp < val) {
+            maxamp = val;
+        }
     }
 
     maxamp = 1.0 / maxamp;
@@ -49,8 +50,9 @@ normalize_rt(double* t) {
 
 void
 lookup_init_rt() {
-    if (tables_initialized == 1)
-    { return; }
+    if (tables_initialized == 1) {
+        return;
+    }
 
     uint16_t harm_odd = 1, harm = 1;
     double ampsq = 0.0f, amptr = 0.0f, ampsaw = 0.0f;
