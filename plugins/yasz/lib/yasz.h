@@ -29,34 +29,34 @@
  * @section Coding
  *
  * I will expand on this later, these are just a list of design decitions
- * that I'll keep here to remind myself to follow 
+ * that I'll keep here to remind myself to follow
  * (will add test for this later too).
  *
  * - Each ".h" must have a ".c" with the same name
  * - All real time safe function must end with  "_rt" suffix
- * - If a function is specific for manipulating a struct, the pointer 
+ * - If a function is specific for manipulating a struct, the pointer
  *   to that struct must be the first parameter to pass.
  */
 typedef struct t_yasz {
-  // yasz should have:
-  //   - a selected waveform enum
-  //   - a global envelop configuration
-  //   - an array of voices with adsr
+    // yasz should have:
+    //   - a selected waveform enum
+    //   - a global envelop configuration
+    //   - an array of voices with adsr
 
-  VOICE *voice[VOICE_MAX_VOICES];
-  uint8_t noteState[128];  // this should be the voices?
+    VOICE* voice[VOICE_MAX_VOICES];
+    uint8_t noteState[128];  // this should be the voices?
 
-  /* does this make any sense? */
-  double left;
-  double right;
+    /* does this make any sense? */
+    double left;
+    double right;
 } YASZ;
 
 
 YASZ* yasz_new(uint32_t srate);
-void yasz_update_srate(YASZ *p_yasz);
-void yasz_render_rt(YASZ *p_yasz);
-void yasz_proc_midi(YASZ *p_yasz,
-    const uint8_t size,
-    const uint8_t* const data);
+void yasz_update_srate(YASZ* p_yasz);
+void yasz_render_rt(YASZ* p_yasz);
+void yasz_proc_midi(YASZ* p_yasz,
+                    const uint8_t size,
+                    const uint8_t* const data);
 
 #endif  // PLUGINS_YASZ_LIB_YASZ_H_

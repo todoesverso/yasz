@@ -32,16 +32,16 @@
  * provides several functions to interact with this structure.
  */
 typedef struct t_osct {
-  double freq;                /**< frequency of the oscilator in Hz */
-  double phase;               /**< phase of the oscilator in radians */
-  double phaseinc;            /**< phase increments */
-  double (*ttable)[TLEN + 1]; /**< ppointer to table lookup */
-  double* table;              /**< pointer to table lookup */
-  double tlenoversr;          /**< constant (table length)/samplerate */
-  uint16_t tlen;              /**< lookup table length */
-  uint16_t harmonics;         /**< numbers of harmonics to render */
-  uint32_t srate;             /**< sample rate in Hz */
-  uint8_t wavetype;           /**< wave type see wave_types */
+    double freq;                /**< frequency of the oscilator in Hz */
+    double phase;               /**< phase of the oscilator in radians */
+    double phaseinc;            /**< phase increments */
+    double (*ttable)[TLEN + 1]; /**< ppointer to table lookup */
+    double* table;              /**< pointer to table lookup */
+    double tlenoversr;          /**< constant (table length)/samplerate */
+    uint16_t tlen;              /**< lookup table length */
+    uint16_t harmonics;         /**< numbers of harmonics to render */
+    uint32_t srate;             /**< sample rate in Hz */
+    uint8_t wavetype;           /**< wave type see wave_types */
 } OSCT;
 
 /**
@@ -112,7 +112,7 @@ void osct_wavetype_rt(OSCT* p, uint8_t wt);
 
 /**
  * Generates the output of the oscilator and increases the phase
- * accordingly 
+ * accordingly
  *
  * @param[in] p_osc Pointer to an oscilator
  * @return double the current value of the oscilator

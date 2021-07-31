@@ -19,10 +19,10 @@
 #define PLUGINS_YASZ_LIB_COMMON_H_
 
 enum wave_types_t {
-  YASZ_SINE_T,
-  YASZ_SQUARE_T,
-  YASZ_SAW_T,
-  YASZ_TRIANGLE_T
+    YASZ_SINE_T,
+    YASZ_SQUARE_T,
+    YASZ_SAW_T,
+    YASZ_TRIANGLE_T
 };
 
 #endif  // PLUGINS_YASZ_LIB_COMMON_H_

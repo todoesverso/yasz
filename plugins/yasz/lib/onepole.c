@@ -19,23 +19,26 @@
 static ONEPOLE* onepole_malloc();
 static void onepole_init(ONEPOLE* p_op, double freq);
 
-static ONEPOLE* onepole_malloc() {
-  ONEPOLE* p;
-  p = (ONEPOLE*) malloc(sizeof(ONEPOLE));  // NOLINT(readability/casting)
-  return p;
+static ONEPOLE*
+onepole_malloc() {
+    ONEPOLE* p;
+    p = (ONEPOLE*) malloc(sizeof(ONEPOLE));  // NOLINT(readability/casting)
+    return p;
 }
 
-static void onepole_init(ONEPOLE* p, double freq) {
-  p->a0 = 0.0f;
-  p->b1 = 0.0f;
-  p->z1 = 0.0f;
-  onepole_set_freq_rt(p, freq);
+static void
+onepole_init(ONEPOLE* p, double freq) {
+    p->a0 = 0.0f;
+    p->b1 = 0.0f;
+    p->z1 = 0.0f;
+    onepole_set_freq_rt(p, freq);
 }
 
-ONEPOLE* onepole_new(double freq) {
-  ONEPOLE* p = onepole_malloc();
-  if (p == NULL)
-    return NULL;
-  onepole_init(p, freq);
-  return p;
+ONEPOLE*
+onepole_new(double freq) {
+    ONEPOLE* p = onepole_malloc();
+    if (p == NULL)
+    { return NULL; }
+    onepole_init(p, freq);
+    return p;
 }

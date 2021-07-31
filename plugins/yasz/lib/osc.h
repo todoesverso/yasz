@@ -35,18 +35,18 @@
 #endif
 
 #define UPDATE_PHASE(p) { p->phase += p->phaseinc; \
-                          if (p->phase >= TWO_PI)  \
-                            p->phase -= TWO_PI;    \
-                          if (p->phase < 0.0)      \
-                            p->phase += TWO_PI;    \
-                        }
+        if (p->phase >= TWO_PI)  \
+            p->phase -= TWO_PI;    \
+        if (p->phase < 0.0)      \
+            p->phase += TWO_PI;    \
+    }
 
 enum wave_types {
-  YASZ_SINE,
-  YASZ_SQUARE,
-  YASZ_SAW_UP,
-  YASZ_SAW_DOWN,
-  YASZ_TRIANGLE
+    YASZ_SINE,
+    YASZ_SQUARE,
+    YASZ_SAW_UP,
+    YASZ_SAW_DOWN,
+    YASZ_TRIANGLE
 };
 
 /**
@@ -56,12 +56,12 @@ enum wave_types {
  * provides several functions to interact with this structure.
  */
 typedef struct t_osc {
-  double freq;        /**< frequency of the oscilator in Hz */
-  double phase;       /**< phase of the oscilator in radians */
-  double phaseinc;    /**< phase incrmenets */
-  double twopioversr; /**< constant (TWO_PI)/samplerate @see TWO_PI */
-  uint32_t srate;     /**< sample rate in Hz */
-  uint8_t wavetype;       /**< wave type see wave_types */
+    double freq;        /**< frequency of the oscilator in Hz */
+    double phase;       /**< phase of the oscilator in radians */
+    double phaseinc;    /**< phase incrmenets */
+    double twopioversr; /**< constant (TWO_PI)/samplerate @see TWO_PI */
+    uint32_t srate;     /**< sample rate in Hz */
+    uint8_t wavetype;       /**< wave type see wave_types */
 } OSC;
 
 /**
@@ -90,19 +90,19 @@ void osc_update_freq_rt(OSC* p_osc, double newfreq);
  * @param[in] p_osc Pointer to a oscilator
  * @param[in] phase The new phase of the oscilator
  */
-void osc_update_phase_rt(OSC *p_osc, double phase);
+void osc_update_phase_rt(OSC* p_osc, double phase);
 
 /**
  * Modifies the sample rate of a t_osc struct
  * @param[in] p_osc Pointer to an oscilator
  * @param[in] srate The new sample rate of the oscilator
  */
-void osc_update_srate_rt(OSC *p_osc, uint32_t srate);
-void osc_update_wavetype_rt(OSC *p_osc, uint8_t wavetype);
+void osc_update_srate_rt(OSC* p_osc, uint32_t srate);
+void osc_update_wavetype_rt(OSC* p_osc, uint8_t wavetype);
 
 /**
  * Generates the output of the oscilator and increases the phase
- * accordingly 
+ * accordingly
  *
  * @param[in] p_osc Pointer to an oscilator
  * @return double the current value of the oscilator

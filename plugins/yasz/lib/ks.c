@@ -20,52 +20,57 @@
 #include "common.h"
 
 
-static KS* ks_malloc() {
-  KS* p;
-  p = (KS*) malloc(sizeof(KS));  // NOLINT(readability/casting)
-  return p;
+static KS*
+ks_malloc() {
+    KS* p;
+    p = (KS*) malloc(sizeof(KS));  // NOLINT(readability/casting)
+    return p;
 }
 
-static void ks_init(KS* p, uint32_t const srate) {
-  p->srate = srate;
-  p->index = 0;
-  p->size = 1; // init > 0
-  p->sample = p->table[0];
+static void
+ks_init(KS* p, uint32_t const srate) {
+    p->srate = srate;
+    p->index = 0;
+    p->size = 1; // init > 0
+    p->sample = p->table[0];
 }
 
-KS* ks_new(uint32_t const srate) {
-  KS* p = ks_malloc();
-  if (p == NULL)
-    return NULL;
-  p->table = (double*) calloc(srate , sizeof(double));
-  if (p->table == NULL) {
-    free(p);
-    return NULL;
-  }
+KS*
+ks_new(uint32_t const srate) {
+    KS* p = ks_malloc();
+    if (p == NULL)
+    { return NULL; }
+    p->table = (double*) calloc(srate, sizeof(double));
+    if (p->table == NULL) {
+        free(p);
+        return NULL;
+    }
 
-  ks_init(p, srate);
-  return p;
+    ks_init(p, srate);
+    return p;
 }
 
-double ks_render_rt(KS *p) {
-  p->sample = p->table[p->index];
-  if (p->index == 0)
-    p->sample += p->table[p->size - 1];
-  else
-    p->sample += p->table[p->index - 1];
+double
+ks_render_rt(KS* p) {
+    p->sample = p->table[p->index];
+    if (p->index == 0)
+    { p->sample += p->table[p->size - 1]; }
+    else
+    { p->sample += p->table[p->index - 1]; }
 
-  p->sample = p->sample * 0.5 * 0.994;
-  p->table[p->index] = p->sample;
-  p->index++;
-  p->index %= p->size;
+    p->sample = p->sample * 0.5 * 0.994;
+    p->table[p->index] = p->sample;
+    p->index++;
+    p->index %= p->size;
 
-  return p->sample;
+    return p->sample;
 }
 
-void ks_freq_rt(KS *p, double freq) {
-  p->size = 1 + (uint32_t) p->srate/(freq * 0.5f); // 1 octave up!? 
-  p->index = 0;
-  for (uint32_t i = 0; i < p->size; i++)
-    p->table[i] = ((double)rand() / (double)RAND_MAX) * 2.0f - 1.0f;
+void
+ks_freq_rt(KS* p, double freq) {
+    p->size = 1 + (uint32_t) p->srate / (freq * 0.5f); // 1 octave up!?
+    p->index = 0;
+    for (uint32_t i = 0; i < p->size; i++)
+    { p->table[i] = ((double)rand() / (double)RAND_MAX) * 2.0f - 1.0f; }
 
 }

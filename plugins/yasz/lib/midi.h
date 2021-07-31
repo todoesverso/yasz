@@ -30,14 +30,14 @@
 
 #define MIDI_NOTES            127
 enum midi_note_status {
-  NOTE_OFF, /**< Midi note off status */
-  NOTE_ON   /**< Midi note on status */
+    NOTE_OFF, /**< Midi note off status */
+    NOTE_ON   /**< Midi note on status */
 };
 
 enum midi_status_index_from_event {
-  MIDI_STATUS_BYTE, /**< Midi's status byte */
-  MIDI_NOTE_BYTE,   /**< Midi's note byte */
-  MIDI_VEL_BYTE     /**< Midi's velocity byte */
+    MIDI_STATUS_BYTE, /**< Midi's status byte */
+    MIDI_NOTE_BYTE,   /**< Midi's note byte */
+    MIDI_VEL_BYTE     /**< Midi's velocity byte */
 };
 
 /**
@@ -46,8 +46,8 @@ enum midi_status_index_from_event {
  * Very simple and functional  midi representation
  **/
 typedef struct midi_t {
-  uint8_t notestate; /**< The state of the midi note (NOTE_OFF|NOTE_ON)*/
-  uint8_t midinote;  /**< The actual midi note */
+    uint8_t notestate; /**< The state of the midi note (NOTE_OFF|NOTE_ON)*/
+    uint8_t midinote;  /**< The actual midi note */
 } MIDI;
 
 
@@ -57,7 +57,7 @@ typedef struct midi_t {
 #define midi_get_note_vel_rt(x) (x[MIDI_VEL_BYTE])
 #define midi_to_freq_rt(x,b)    (b*powf(2.0f, ((x)-69.f)*0.083333333))
 
-MIDI *midi_new();
+MIDI* midi_new();
 void midi_init_rt(MIDI* p);
 
 extern const double midi_to_freq[MIDI_NOTES + 1];

@@ -29,7 +29,8 @@ FILES_UI  = \
 # Do some magic
 
 include ../../dpf/Makefile.plugins.mk
-BASE_FLAGS += -fdiagnostics-color
+BUILD_C_FLAGS += -std=c11 -fopt-info-all
+BASE_FLAGS += -fdiagnostics-color=always
 # --------------------------------------------------------------
 # Enable all possible plugin types
 
@@ -39,7 +40,7 @@ TARGETS += jack
 endif
 endif
 
-TARGETS += vst
+#TARGETS += vst
 
 ifeq ($(HAVE_OPENGL),true)
 TARGETS += lv2_sep

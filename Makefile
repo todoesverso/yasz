@@ -40,6 +40,9 @@ clean:
 install:
 	install -d ${HOME}/.lv2/yasz.lv2/
 	install -m 644 -D bin/yasz.lv2/* ${HOME}/.lv2/yasz.lv2/
+
+style:
+	astyle --options="astyle.cfg" "plugins/yasz/lib/*.c,*.h"
 # --------------------------------------------------------------
 
 .PHONY: plugins

@@ -21,15 +21,15 @@
 #include <stdint.h>
 
 typedef struct ks_t {
-  double*  table;
-  uint32_t srate;
-  uint32_t size;
-  uint32_t index;
-  double   sample;
+    double*  table;
+    uint32_t srate;
+    uint32_t size;
+    uint32_t index;
+    double   sample;
 } KS;
 
 KS* ks_new(uint32_t const srate);
-double ks_render_rt(KS *p);
-void ks_freq_rt(KS *p, double freq);
+double ks_render_rt(KS* p);
+void ks_freq_rt(KS* p, double freq);
 
 #endif  // PLUGINS_YASZ_LIB_KS_H_

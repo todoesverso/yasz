@@ -23,18 +23,20 @@
 #include "lib/utils.h"
 
 typedef struct t_oenpole {
-  double a0;
-  double b1;
-  double z1;
+    double a0;
+    double b1;
+    double z1;
 } ONEPOLE;
 
-inline void onepole_set_freq_rt(ONEPOLE *p, double freq) {
-  p->b1 = exp(-TWO_PI * freq);
-  p->a0 = 1.0 - p->b1;
+inline void
+onepole_set_freq_rt(ONEPOLE* p, double freq) {
+    p->b1 = exp(-TWO_PI * freq);
+    p->a0 = 1.0 - p->b1;
 }
 
-inline double onepole_process(ONEPOLE *p, double input) {
-  return p->z1 = input * p->a0 + p->z1 * p->b1;
+inline double
+onepole_process(ONEPOLE* p, double input) {
+    return p->z1 = input * p->a0 + p->z1 * p->b1;
 }
 
 ONEPOLE* onepole_new(double freq);
