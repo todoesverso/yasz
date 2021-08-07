@@ -22,59 +22,26 @@
 #include "ks.h"
 #include "common.h"
 
-
-static VOICE*
-voice_malloc() {
-    VOICE* p;
-    p = (VOICE*) malloc(sizeof(VOICE));  // NOLINT(readability/casting)
-    return p;
-}
-
-static void
-voice_init(VOICE* p, uint32_t const srate) {
-    p->srate = srate;
-    p->sub = osct_new(srate);
-    p->osct1 = osct_new(srate);
-    p->osct2 = osct_new(srate);
-    p->ks = ks_new(srate);
-    p->ks1 = ks_new(srate);
-    p->ks2 = ks_new(srate);
-    voice_sub_wavetype_rt(p, YASZ_SINE_T);
-    voice_osct1_wavetype_rt(p, YASZ_SAW_T);
-    voice_osct2_wavetype_rt(p, YASZ_TRIANGLE_T);
-    p->adsr = adsr_new();
-    p->midi = midi_new();
-    p->sub_gain = 0.6f;
-    p->osct1_gain = 0.4f;
-    p->osct2_gain = 0.3f;
-    p->ks_gain = 0.2f;
-    p->left = 0.0f;
-    p->right = 0.0f;
-
-    adsr_set_attack_rate_rt(p->adsr, 0.1f * srate);
-    adsr_set_decay_rate_rt(p->adsr, 0.3f * srate);
-    adsr_set_release_rate_rt(p->adsr, 2.0f * srate);
-    adsr_set_sustain_level_rt(p->adsr, 0.8f);
-}
+extern double adsr_process_rt(ADSR* p);
 
 void
 voice_attack_rate(VOICE* p, double rate) {
-    adsr_set_attack_rate_rt(p->adsr, rate * p->srate);
+    adsr_set_attack_rate_rt(&p->adsr, rate * p->srate);
 }
 
 void
 voice_decay_rate(VOICE* p, double rate) {
-    adsr_set_decay_rate_rt(p->adsr, rate * p->srate);
+    adsr_set_decay_rate_rt(&p->adsr, rate * p->srate);
 }
 
 void
 voice_release_rate(VOICE* p, double rate) {
-    adsr_set_release_rate_rt(p->adsr, rate * p->srate);
+    adsr_set_release_rate_rt(&p->adsr, rate * p->srate);
 }
 
 void
 voice_sustain_level(VOICE* p, double level) {
-    adsr_set_sustain_level_rt(p->adsr, level);
+    adsr_set_sustain_level_rt(&p->adsr, level);
 }
 
 /**
@@ -82,33 +49,55 @@ voice_sustain_level(VOICE* p, double level) {
  **/
 static inline double
 voice_osct_render_rt(VOICE* p) {
-    return osct_get_out_rt(p->osct1) * p->osct1_gain +
-           osct_get_out_rt(p->osct2) * p->osct2_gain +
-           osct_get_out_rt(p->sub) * p->sub_gain;
+    return osct_get_out_rt(&p->osc1) * p->osc1_gain +
+           osct_get_out_rt(&p->osc2) * p->osc2_gain +
+           osct_get_out_rt(&p->sub) * p->sub_gain;
 }
 
 static inline void
 voice_ks_render_rt(VOICE* p) {
-    double base_ks = ks_render_rt(p->ks);
+    double base_ks = ks_render_rt(&p->ks);
     p->left += (base_ks +
-                ks_render_rt(p->ks1)) * p->ks_gain;
+                ks_render_rt(&p->ks1)) * p->ks_gain;
     p->right += (base_ks +
-                 ks_render_rt(p->ks2)) * p->ks_gain;
+                 ks_render_rt(&p->ks2)) * p->ks_gain;
 }
 
-VOICE*
+VOICE
 voice_new(uint32_t const srate) {
-    VOICE* p = voice_malloc();
-    if (p == NULL) {
-        return NULL;
-    }
-    voice_init(p, srate);
-    return p;
+    VOICE voice = {
+        .srate = srate,
+        .sub_gain = 0.6f,
+        .osc1_gain = 0.4f,
+        .osc2_gain = 0.3f,
+        .ks_gain = 0.2f,
+        .sub = osct_new(srate),
+        .osc1 = osct_new(srate),
+        .osc2 = osct_new(srate),
+
+        .ks = ks_new(srate),
+        .ks1 = ks_new(srate),
+        .ks2 = ks_new(srate),
+
+        .adsr = adsr_new(),
+        .midi = midi_new(),
+    };
+
+    voice_sub_wavetype_rt(&voice, YASZ_SINE_T);
+    voice_osct1_wavetype_rt(&voice, YASZ_SAW_T);
+    voice_osct2_wavetype_rt(&voice, YASZ_TRIANGLE_T);
+
+    adsr_set_attack_rate_rt(&voice.adsr, 0.1f * srate);
+    adsr_set_decay_rate_rt(&voice.adsr, 0.3f * srate);
+    adsr_set_release_rate_rt(&voice.adsr, 2.0f * srate);
+    adsr_set_sustain_level_rt(&voice.adsr, 0.8f);
+
+    return voice;
 }
 
 void
 voice_render_rt(VOICE* p) {
-    double env = adsr_process_rt(p->adsr);
+    double env = adsr_process_rt(&p->adsr);
     p->left = voice_osct_render_rt(p) * env;
     p->right = voice_osct_render_rt(p) * env;
     voice_ks_render_rt(p);
@@ -121,12 +110,12 @@ voice_sub_gain_rt(VOICE* p, float gain) {
 
 void
 voice_osct1_gain_rt(VOICE* p, float gain) {
-    p->osct1_gain = gain;
+    p->osc1_gain = gain;
 }
 
 void
 voice_osct2_gain_rt(VOICE* p, float gain) {
-    p->osct2_gain = gain;
+    p->osc2_gain = gain;
 }
 
 void
@@ -136,27 +125,25 @@ voice_ks_gain_rt(VOICE* p, float gain) {
 
 void
 voice_freq_rt(VOICE* p, double freq) {
-    osct_freq_rt(p->sub, freq * 0.25f);
-    osct_freq_rt(p->osct1, freq);
-    osct_freq_rt(p->osct2, freq);
-    ks_freq_rt(p->ks, freq);
-    ks_freq_rt(p->ks2, freq + 1.f);
-    ks_freq_rt(p->ks1, freq - 1.f);
+    osct_freq_rt(&p->sub, freq * 0.25f);
+    osct_freq_rt(&p->osc1, freq);
+    osct_freq_rt(&p->osc2, freq);
+    ks_freq_rt(&p->ks, freq);
+    ks_freq_rt(&p->ks2, freq + 1.f);
+    ks_freq_rt(&p->ks1, freq - 1.f);
 }
 
 void
 voice_sub_wavetype_rt(VOICE* p, uint8_t wavetype) {
-    osct_wavetype_rt(p->sub, wavetype);
+    osct_wavetype_rt(&p->sub, wavetype);
 }
 
 void
 voice_osct1_wavetype_rt(VOICE* p, uint8_t wavetype) {
-    osct_wavetype_rt(p->osct1, wavetype);
+    osct_wavetype_rt(&p->osc1, wavetype);
 }
 
 void
 voice_osct2_wavetype_rt(VOICE* p, uint8_t wavetype) {
-    osct_wavetype_rt(p->osct2, wavetype);
+    osct_wavetype_rt(&p->osc2, wavetype);
 }
-
-

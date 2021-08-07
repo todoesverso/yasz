@@ -20,35 +20,14 @@
 #include "common.h"
 
 
-static KS*
-ks_malloc() {
-    KS* p;
-    p = (KS*) malloc(sizeof(KS));  // NOLINT(readability/casting)
-    return p;
-}
-
-static void
-ks_init(KS* p, uint32_t const srate) {
-    p->srate = srate;
-    p->index = 0;
-    p->size = 1; // init > 0
-    p->sample = p->table[0];
-}
-
-KS*
+KS
 ks_new(uint32_t const srate) {
-    KS* p = ks_malloc();
-    if (p == NULL) {
-        return NULL;
-    }
-    p->table = (double*) calloc(srate, sizeof(double));
-    if (p->table == NULL) {
-        free(p);
-        return NULL;
-    }
+    KS ks = {
+        .srate = srate,
+        .size = 1
+    };
 
-    ks_init(p, srate);
-    return p;
+    return ks;
 }
 
 double

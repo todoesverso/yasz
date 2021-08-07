@@ -57,9 +57,9 @@ yazs_mixer_rt(YASZ* p) {
     double left = 0.0f;
     double right = 0.0f;
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++) {
-        voice_render_rt(p->voice[i]);
-        left += p->voice[i]->left;
-        right += p->voice[i]->right;
+        voice_render_rt(&p->voice[i]);
+        left += p->voice[i].left;
+        right += p->voice[i].right;
     }
     p->left = left;
     p->right = right;
@@ -74,7 +74,7 @@ VOICE*
 yasz_get_free_voice(YASZ* p) {
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
         if (voice_is_free(p->voice[i])) {
-            return p->voice[i];
+            return &p->voice[i];
         }
 
     return NULL;
@@ -83,8 +83,8 @@ yasz_get_free_voice(YASZ* p) {
 VOICE*
 yasz_get_on_voice(YASZ* p, uint8_t note) {
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++)
-        if (p->voice[i]->midi->midinote == note) {
-            return p->voice[i];
+        if (p->voice[i].midi.midinote == note) {
+            return &p->voice[i];
         }
 
     return NULL;
@@ -107,25 +107,25 @@ yasz_proc_midi(YASZ* p_yasz,
     switch (status) {
         case MIDI_NOTE_ON:
             if (p_voice_on && velo == 0) {
-                p_voice_on->midi->notestate = NOTE_OFF;
-                p_voice_on->midi->midinote = NOTE_OFF;
-                adsr_gate_off_rt(p_voice_on->adsr);
+                p_voice_on->midi.notestate = NOTE_OFF;
+                p_voice_on->midi.midinote = NOTE_OFF;
+                adsr_gate_off_rt(&p_voice_on->adsr);
             }
 
             if (velo > 0 && p_free_voice) {
-                p_free_voice->midi->notestate = NOTE_ON;
-                p_free_voice->midi->midinote = note;
+                p_free_voice->midi.notestate = NOTE_ON;
+                p_free_voice->midi.midinote = note;
                 double freq = midi_to_freq[note];
                 //double freq = midi_to_freq_rt(note, 440);
                 voice_freq_rt(p_free_voice, freq);
-                adsr_gate_on_rt(p_free_voice->adsr);
+                adsr_gate_on_rt(&p_free_voice->adsr);
             }
             break;
         case MIDI_NOTE_OFF:
             if (p_voice_on) {
-                p_voice_on->midi->notestate = NOTE_OFF;
-                p_voice_on->midi->midinote = NOTE_OFF;
-                adsr_gate_off_rt(p_voice_on->adsr);
+                p_voice_on->midi.notestate = NOTE_OFF;
+                p_voice_on->midi.midinote = NOTE_OFF;
+                adsr_gate_off_rt(&p_voice_on->adsr);
             }
             break;
     }

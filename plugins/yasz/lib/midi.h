@@ -57,7 +57,7 @@ typedef struct midi_t {
 #define midi_get_note_vel_rt(x) (x[MIDI_VEL_BYTE])
 #define midi_to_freq_rt(x,b)    (b*powf(2.0f, ((x)-69.f)*0.083333333))
 
-MIDI* midi_new();
+MIDI midi_new();
 void midi_init_rt(MIDI* p);
 
 extern const double midi_to_freq[MIDI_NOTES + 1];

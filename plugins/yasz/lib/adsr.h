@@ -54,7 +54,7 @@ typedef struct t_adsr {
     double out;
 } ADSR;
 
-ADSR* adsr_new();
+ADSR adsr_new();
 void adsr_set_attack_rate_rt(ADSR* p_adsr, double rate);
 void adsr_set_decay_rate_rt(ADSR* p_adsr, double rate);
 void adsr_set_release_rate_rt(ADSR* p_adsr, double rate);

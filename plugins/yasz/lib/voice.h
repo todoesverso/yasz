@@ -27,25 +27,25 @@
 #define VOICE_MAX_VOICES 10
 
 typedef struct voice_t {
-    ADSR* adsr;
-    OSCT* sub;
-    OSCT* osct1;
-    OSCT* osct2;
-    MIDI* midi;
-    KS*   ks;
-    KS*   ks1;
-    KS*   ks2;
+    ADSR adsr;
+    OSCT sub;
+    OSCT osc1;
+    OSCT osc2;
+    MIDI midi;
+    KS   ks;
+    KS   ks1;
+    KS   ks2;
 
     float sub_gain;
-    float osct1_gain;
-    float osct2_gain;
+    float osc1_gain;
+    float osc2_gain;
     float ks_gain;
     double left;
     double right;
     double srate;
 } VOICE;
 
-VOICE* voice_new(uint32_t const srate);
+VOICE voice_new(uint32_t const srate);
 void voice_render_rt(VOICE* p);
 void voice_freq_rt(VOICE* p, double freq);
 void voice_osct1_gain_rt(VOICE* p, float gain);
@@ -55,6 +55,6 @@ void voice_ks_gain_rt(VOICE* p, float gain);
 void voice_sub_wavetype_rt(VOICE* p, uint8_t wt);
 void voice_osct1_wavetype_rt(VOICE* p, uint8_t wt);
 void voice_osct2_wavetype_rt(VOICE* p, uint8_t wt);
-#define voice_is_free(v) ((v->midi->notestate == NOTE_OFF) ? 1 : 0)
+#define voice_is_free(v) ((v.midi.notestate == NOTE_OFF) ? 1 : 0)
 
 #endif  // PLUGINS_YASZ_LIB_VOICE_H_
