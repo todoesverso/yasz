@@ -12,13 +12,17 @@ NAME = yasz
 # --------------------------------------------------------------
 # Files to build
 
-FILES_DSP = \
-	YaszPlugin.cpp \
-	lib/osc.c lib/utils.c  \
-	lib/yasz.c lib/adsr.c  \
-	lib/midi.c lib/voice.c \
-	lib/osct.c lib/wave.c \
-	lib/ks.c
+FILES_DSP =       \
+  YaszPlugin.cpp  \
+  lib/osc.c       \
+  lib/utils.c     \
+  lib/adsr.c      \
+  lib/midi.c      \
+  lib/voice.c     \
+  lib/osct.c      \
+  lib/wave.c      \
+  lib/ks.c        \
+  lib/yasz.c
 
 
 FILES_UI  = \

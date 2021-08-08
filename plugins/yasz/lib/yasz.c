@@ -19,8 +19,11 @@
 #include <stdint.h>
 #include "midi.h"
 #include "yasz.h"
-#include "adsr.h"
 #include "voice.h"
+#include "adsr.h"
+
+
+//extern inline void adsr_gate_rt(ADSR *p);
 
 static YASZ* yasz_malloc();
 static void yasz_init(YASZ* p, uint32_t const srate);
