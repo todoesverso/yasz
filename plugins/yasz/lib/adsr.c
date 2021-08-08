@@ -19,37 +19,20 @@
 /**************************
  * Static adsr.c functions
  **************************/
-static ADSR* adsr_malloc();
-static void adsr_init(ADSR* p);
-
-static ADSR*
-adsr_malloc() {
-    ADSR* p;
-    p = (ADSR*) malloc(sizeof(ADSR));  // NOLINT(readability/casting)
-    return p;
-}
-
-static void
-adsr_init(ADSR* p) {
-    p->state = IDLE;
-    p->out = 0.0;
-
-    adsr_set_attack_rate_rt(p, 0);
-    adsr_set_decay_rate_rt(p, 0);
-    adsr_set_release_rate_rt(p, 0);
-    adsr_set_sustain_level_rt(p, 1.0);
-    adsr_set_target_ratio_a_rt(p, 0.3);
-    adsr_set_target_ratio_dr_rt(p, 0.00001);
-}
-
-ADSR*
+ADSR
 adsr_new() {
-    ADSR* p = adsr_malloc();
-    if (p == NULL) {
-        return NULL;
-    }
-    adsr_init(p);
-    return p;
+    ADSR adsr = {
+        .state = IDLE
+    };
+
+    adsr_set_attack_rate_rt(&adsr, 0);
+    adsr_set_decay_rate_rt(&adsr, 0);
+    adsr_set_release_rate_rt(&adsr, 0);
+    adsr_set_sustain_level_rt(&adsr, 1.0);
+    adsr_set_target_ratio_a_rt(&adsr, 0.3);
+    adsr_set_target_ratio_dr_rt(&adsr, 0.00001);
+
+    return adsr;
 }
 
 void

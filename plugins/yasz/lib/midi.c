@@ -21,26 +21,13 @@
 /******************************
  * Static functions for midi.c
  *****************************/
-static MIDI*
-midi_malloc() {
-    MIDI* p;
-    p = (MIDI*) malloc(sizeof(MIDI));  // NOLINT(readability/casting)
-    return p;
-}
-
-void
-midi_init_rt(MIDI* p) {
-    p->notestate = NOTE_OFF;
-}
-
-MIDI*
+MIDI
 midi_new() {
-    MIDI* p = midi_malloc();
-    if (p == NULL) {
-        return NULL;
-    }
-    midi_init_rt(p);
-    return p;
+    MIDI midi = {
+        .notestate = NOTE_OFF
+    };
+
+    return midi;
 }
 
 const double midi_to_freq[MIDI_NOTES + 1] = {

@@ -43,7 +43,7 @@ typedef struct t_yasz {
     //   - a global envelop configuration
     //   - an array of voices with adsr
 
-    VOICE* voice[VOICE_MAX_VOICES];
+    VOICE voice[VOICE_MAX_VOICES];
     uint8_t noteState[128];  // this should be the voices?
 
     /* does this make any sense? */

@@ -25,4 +25,6 @@ enum wave_types_t {
     YASZ_TRIANGLE_T
 };
 
+typedef double yasz_sample;
+
 #endif  // PLUGINS_YASZ_LIB_COMMON_H_

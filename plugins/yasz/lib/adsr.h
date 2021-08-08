@@ -54,7 +54,7 @@ typedef struct t_adsr {
     double out;
 } ADSR;
 
-ADSR* adsr_new();
+ADSR adsr_new();
 void adsr_set_attack_rate_rt(ADSR* p_adsr, double rate);
 void adsr_set_decay_rate_rt(ADSR* p_adsr, double rate);
 void adsr_set_release_rate_rt(ADSR* p_adsr, double rate);
@@ -98,7 +98,7 @@ adsr_process_rt(ADSR* p) {
     return p->out;
 }
 
-inline void
+static inline void
 adsr_gate_rt(ADSR* p, uint8_t gate) {
     if (gate) {
         p->state = ATTACK;
@@ -106,6 +106,7 @@ adsr_gate_rt(ADSR* p, uint8_t gate) {
         p->state = RELEASE;
     }
 }
+
 
 #define adsr_gate_on_rt(p) (adsr_gate_rt(p, 1))
 #define adsr_gate_off_rt(p) (adsr_gate_rt(p, 0))

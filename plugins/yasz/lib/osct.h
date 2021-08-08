@@ -36,7 +36,7 @@ typedef struct t_osct {
     double phase;               /**< phase of the oscilator in radians */
     double phaseinc;            /**< phase increments */
     double (*ttable)[TLEN + 1]; /**< ppointer to table lookup */
-    double* table;              /**< pointer to table lookup */
+    double* table;     /**< pointer to table lookup */
     double tlenoversr;          /**< constant (table length)/samplerate */
     uint16_t tlen;              /**< lookup table length */
     uint16_t harmonics;         /**< numbers of harmonics to render */
@@ -49,14 +49,14 @@ typedef struct t_osct {
  * @param[in] srate The sample rate in Hz
  * @return t_osc An allocated oscilator or NULL if no memory
  */
-OSCT* osct_new(uint32_t srate);
+OSCT osct_new(uint32_t srate);
 
 /**
  * Resets an oscilator
  * @param[in] p_osc Pointer to an oscilator
  * @param[in] srate The sample rate in Hz
  */
-void osct_init_rt(OSCT* p, uint32_t srate);
+OSCT osct_init_rt(uint32_t srate);
 
 /**
  * Modifies the frequency of a t_osc struct

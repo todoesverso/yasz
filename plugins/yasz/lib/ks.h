@@ -21,14 +21,15 @@
 #include <stdint.h>
 
 typedef struct ks_t {
-    double*  table;
+    // TODO: Review this number
+    double  table[96000];
     uint32_t srate;
     uint32_t size;
     uint32_t index;
     double   sample;
 } KS;
 
-KS* ks_new(uint32_t const srate);
+KS ks_new(uint32_t const srate);
 double ks_render_rt(KS* p);
 void ks_freq_rt(KS* p, double freq);
 
