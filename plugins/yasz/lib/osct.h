@@ -36,7 +36,7 @@ typedef struct t_osct {
     double phase;               /**< phase of the oscilator in radians */
     double phaseinc;            /**< phase increments */
     double (*ttable)[TLEN + 1]; /**< ppointer to table lookup */
-    double* table;     /**< pointer to table lookup */
+    double* table;              /**< pointer to table lookup */
     double tlenoversr;          /**< constant (table length)/samplerate */
     uint16_t tlen;              /**< lookup table length */
     uint16_t harmonics;         /**< numbers of harmonics to render */

@@ -20,13 +20,14 @@
 #define PLUGINS_YASZ_LIB_WAVE_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <math.h>
 
 #define HARMONICS (128)
 #define TLEN (2048)
 #define MAX_FREQ (8000)
 
-extern uint8_t tables_initialized;
+extern bool tables_initialized;
 
 extern double yasz_square_t[HARMONICS][TLEN + 1];
 extern double yasz_triangle_t[HARMONICS][TLEN + 1];

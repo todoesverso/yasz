@@ -19,10 +19,11 @@
 
 #include <stdint.h>
 #include <math.h>
+#include <stdbool.h>
 #include "wave.h"
 #include "utils.h"
 
-uint8_t tables_initialized = 0;
+bool tables_initialized = false;
 
 double yasz_square_t[HARMONICS][TLEN + 1];
 double yasz_triangle_t[HARMONICS][TLEN + 1];
@@ -50,7 +51,7 @@ normalize_rt(double* t) {
 
 void
 lookup_init_rt() {
-    if (tables_initialized == 1) {
+    if (tables_initialized) {
         return;
     }
 
@@ -85,5 +86,5 @@ lookup_init_rt() {
         normalize_rt(yasz_triangle_t[i]);
     }
 
-    tables_initialized = 1;
+    tables_initialized = true;
 }
