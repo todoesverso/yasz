@@ -21,6 +21,7 @@
 #include "yasz.h"
 #include "voice.h"
 #include "adsr.h"
+#include "pan.h"
 
 
 static YASZ* yasz_malloc();
@@ -35,6 +36,9 @@ yasz_malloc() {
 
 static void
 yasz_init(YASZ* p, uint32_t const srate) {
+    p->pan_value = 0.0f;
+    p->pan_position = constantpower_rt(0.0f);
+
     p->left = 0.0f;
     p->right = 0.0f;
 
@@ -54,6 +58,12 @@ yasz_new(uint32_t srate) {
 }
 
 void
+yasz_pan_rt(YASZ* p, double pan_value) {
+    p->pan_value = pan_value;
+    p->pan_position = constantpower_rt(pan_value);
+}
+
+void
 yazs_mixer_rt(YASZ* p) {
     double left = 0.0f;
     double right = 0.0f;
@@ -62,8 +72,8 @@ yazs_mixer_rt(YASZ* p) {
         left += p->voice[i].left;
         right += p->voice[i].right;
     }
-    p->left = left;
-    p->right = right;
+    p->left = left * p->pan_position.left;
+    p->right = right * p->pan_position.right;
 }
 
 void

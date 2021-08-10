@@ -29,6 +29,7 @@ class YaszPlugin : public Plugin {
         : Plugin(kParameterCount, 0, 0) {
           uint32_t srate = (uint32_t)getSampleRate();
           yasz = yasz_new(srate);
+          fParams.pan = 0.0f;
         }
 
  protected:
@@ -94,7 +95,20 @@ class YaszPlugin : public Plugin {
       Initialize the parameter @a index.
       This function will be called once, shortly after the plugin is created.
     */
-    void initParameter(uint32_t , Parameter&) override {}
+    void initParameter(uint32_t index, Parameter& parameter) {
+      switch (index) {
+          case paramPan:
+            parameter.hints      = kParameterIsAutomable; // modified x2.5
+            parameter.name       = "pan";
+            parameter.symbol     = "pan";
+            parameter.unit       = "%";
+            parameter.ranges.def = 0.0f;
+            parameter.ranges.min = -1.0f;
+            parameter.ranges.max = 1.0f;
+            parameter.midiCC = 74;
+            break;
+        }
+    }
    /* --------------------------------------------------------------------------------------------------------
     * Internal data */
 
@@ -102,7 +116,14 @@ class YaszPlugin : public Plugin {
       Get the current value of a parameter.
       The host may call this function from any context, including realtime processing.
     */
-    float getParameterValue(uint32_t) const override {}
+    float getParameterValue(uint32_t index) const {
+      switch(index) {
+        case paramPan:
+          return fParams.pan;
+      }
+
+      return 0.0f;
+    }
 
    /**
       Change a parameter value.
@@ -110,8 +131,15 @@ class YaszPlugin : public Plugin {
       When a parameter is marked as automable, you must ensure no non-realtime operations are performed.
       @note This function will only be called for parameter inputs.
     */
-    void setParameterValue(uint32_t, float) override {
-        // this is only called for input parameters, which we have none of.
+    void setParameterValue(uint32_t index, float value) {
+      switch(index) {
+        case paramPan:
+          fParams.pan = value;
+          yasz_pan_rt(yasz, (double)value);
+          DISTRHO_SAFE_ASSERT(fParams.pan >= -1.0f && fParams.pan <= 1.0f);
+      }
+
+
     }
 
    /* --------------------------------------------------------------------------------------------------------
@@ -170,6 +198,10 @@ class YaszPlugin : public Plugin {
 
  private:
     // Parameters
+    struct ParamValues {
+        float pan;
+    } fParams;
+
     YASZ *yasz;
 
    /**

@@ -20,15 +20,24 @@
 
 #include <math.h>
 #include <stdint.h>
+
 #ifndef M_PI
 #define M_PI (3.141592653589793)
 #endif
+
 #ifndef TWO_PI
 #define TWO_PI (6.283185307179586)
 #endif
-#ifndef TRUE
-typedef enum { FALSE, TRUE} boolean;
+
+#ifndef PI_O_2
+#define PI_O_2 (1.5707963267948966)
 #endif
+
+#ifndef SQRT2_O_2
+#define SQRT2_O_2 (0.7071067811865476)
+#endif
+
+
 
 #ifndef MIN
 #define MIN(n1, n2)   ((n1) > (n2) ? (n2) : (n1))
