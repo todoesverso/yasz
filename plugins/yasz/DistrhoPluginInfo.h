@@ -38,6 +38,7 @@ see https://distrho.github.io/DPF/group__PluginMacros.html
 #endif
 
 enum Parameters {
+  paramPan = 0,
   kParameterCount
 };
 

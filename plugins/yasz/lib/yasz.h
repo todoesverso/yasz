@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include "utils.h"
 #include "voice.h"
+#include "pan.h"
 
 /**
  * @mainpage %YASZ - Yet Another ~~Stupid~~ Simple sintesiZer
@@ -44,9 +45,9 @@ typedef struct t_yasz {
     //   - an array of voices with adsr
 
     VOICE voice[VOICE_MAX_VOICES];
-    uint8_t noteState[128];  // this should be the voices?
 
-    /* does this make any sense? */
+    PANPOS pan_position;
+    double pan_value;
     double left;
     double right;
 } YASZ;
@@ -55,6 +56,7 @@ typedef struct t_yasz {
 YASZ* yasz_new(uint32_t srate);
 void yasz_update_srate(YASZ* p_yasz);
 void yasz_render_rt(YASZ* p_yasz);
+void yasz_pan_rt(YASZ* p_yasz, double pan_value);
 void yasz_proc_midi(YASZ* p_yasz,
                     const uint8_t size,
                     const uint8_t* const data);
