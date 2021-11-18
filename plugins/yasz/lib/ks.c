@@ -24,7 +24,7 @@ KS
 ks_new(uint32_t const srate) {
     KS ks = {
         .srate = srate,
-        .size = 1
+        .size = 1,
     };
 
     return ks;
@@ -51,6 +51,7 @@ void
 ks_freq_rt(KS* p, double freq) {
     p->size = 1 + (uint32_t) p->srate / (freq * 0.5f); // 1 octave up!?
     p->index = 0;
+    // TODO: Review this rand() slow
     for (uint32_t i = 0; i < p->size; i++) {
         p->table[i] = ((double)rand() / (double)RAND_MAX) * 2.0f - 1.0f;
     }

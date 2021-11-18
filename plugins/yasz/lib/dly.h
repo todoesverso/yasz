@@ -1,6 +1,6 @@
 /*
  * YASZ (Yet Another Simple synthesiZer)
- * Copyright (C) 2020 Victor Rosales <todoesverso@gmail.com>
+ * Copyright (C) 2021 Victor Rosales <todoesverso@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
@@ -15,22 +15,28 @@
  */
 
 
-#ifndef PLUGINS_YASZ_LIB_KS_H_
-#define PLUGINS_YASZ_LIB_KS_H_
-
+#ifndef PLUGINS_YASZ_LIB_DLY_H_
+#define PLUGINS_YASZ_LIB_DLY_H_
 #include <stdint.h>
 
-typedef struct ks_t {
-    // TODO: Review this number
-    double   table[96000];
-    double   sample;
-    uint32_t srate;
-    uint32_t size;
-    uint32_t index;
-} KS;
+/* Max delay 1s for 192k */
+#define MAXDLY 192001
 
-KS ks_new(uint32_t const srate);
-double ks_render_rt(KS* p);
-void ks_freq_rt(KS* p, double freq);
+typedef struct t_dly {
+    uint32_t  samplerate;
+    uint32_t  buff_size;
+    uint32_t  delay_ms;
+    uint32_t  delay_samples;
+    uint32_t  w_index;
+    uint32_t  r_index;
+    double    feedback;
+    double    buffer[MAXDLY];
+} DLY;
 
-#endif  // PLUGINS_YASZ_LIB_KS_H_
+
+DLY dly_new(double samplerate, uint32_t delay_ms, double feedback);
+void dly_delay_ms(DLY* p_dly, uint32_t delay_ms);
+void dly_feedback(DLY* p_dly, double feedback);
+double dly_out(DLY* p_dly);
+void dly_tick(DLY* p_dly, double sample);
+#endif  // PLUGINS_YASZ_LIB_DLY_H_

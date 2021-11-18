@@ -55,22 +55,26 @@ voice_osct_render_rt(VOICE* p) {
 }
 
 static inline void
-voice_ks_render_rt(VOICE* p) {
-    double base_ks = ks_render_rt(&p->ks);
+voice_ks_render_rt(VOICE* p, double env) {
+    double base_ks = ks_render_rt(&p->ks) * p->ks_gain * env;
+    //p->left = base_ks;
     p->left += (base_ks +
-                ks_render_rt(&p->ks1)) * p->ks_gain;
+                ks_render_rt(&p->ks1)) * p->ks_gain * env;
+    //p->right = base_ks;
     p->right += (base_ks +
-                 ks_render_rt(&p->ks2)) * p->ks_gain;
+                 ks_render_rt(&p->ks2)) * p->ks_gain * env;
 }
 
 VOICE
 voice_new(uint32_t const srate) {
     VOICE voice = {
+        .left = 0.0f,
+        .right = 0.0f,
         .srate = srate,
         .sub_gain = 0.6f,
         .osc1_gain = 0.4f,
         .osc2_gain = 0.3f,
-        .ks_gain = 0.2f,
+        .ks_gain = 0.5f,
         .sub = osct_new(srate),
         .osc1 = osct_new(srate),
         .osc2 = osct_new(srate),
@@ -84,8 +88,8 @@ voice_new(uint32_t const srate) {
     };
 
     voice_sub_wavetype_rt(&voice, YASZ_SINE_T);
-    voice_osct1_wavetype_rt(&voice, YASZ_SAW_T);
-    voice_osct2_wavetype_rt(&voice, YASZ_TRIANGLE_T);
+    voice_osct1_wavetype_rt(&voice, YASZ_SINE_T);
+    voice_osct2_wavetype_rt(&voice, YASZ_SINE_T);
 
     adsr_set_attack_rate_rt(&voice.adsr, 0.1f * srate);
     adsr_set_decay_rate_rt(&voice.adsr, 0.3f * srate);
@@ -100,7 +104,8 @@ voice_render_rt(VOICE* p) {
     double env = adsr_process_rt(&p->adsr);
     p->left = voice_osct_render_rt(p) * env;
     p->right = voice_osct_render_rt(p) * env;
-    voice_ks_render_rt(p);
+    voice_ks_render_rt(p, env); // TODO: env = 1.0 sound better
+    voice_ks_render_rt(p, 1.0); // TODO: env = 1.0 sound better
 }
 
 void

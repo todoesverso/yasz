@@ -22,8 +22,11 @@
 #include "voice.h"
 #include "adsr.h"
 #include "pan.h"
+#include "dly.h"
+#include "freeverb.h"
 
 
+extern inline PANPOS constantpower_rt(double possition);
 static YASZ* yasz_malloc();
 static void yasz_init(YASZ* p, uint32_t const srate);
 
@@ -36,6 +39,9 @@ yasz_malloc() {
 
 static void
 yasz_init(YASZ* p, uint32_t const srate) {
+    p->dly = dly_new(srate, 500, 0.6);
+    p->freeverb = freeverb_new(srate);
+
     p->pan_value = 0.0f;
     p->pan_position = constantpower_rt(0.0f);
 
@@ -67,18 +73,26 @@ void
 yazs_mixer_rt(YASZ* p) {
     double left = 0.0f;
     double right = 0.0f;
+
     for (uint8_t i = 0; i < VOICE_MAX_VOICES; i++) {
         voice_render_rt(&p->voice[i]);
         left += p->voice[i].left;
         right += p->voice[i].right;
     }
-    p->left = left * p->pan_position.left;
-    p->right = right * p->pan_position.right;
+   //left += dly_out(&p->dly);
+    //right += dly_out(&p->dly);
+
+    p->left = left * p->pan_position.left    *0.3;
+    p->right = right * p->pan_position.right *0.3;
 }
 
 void
 yasz_render_rt(YASZ* p) {
+    //dly_tick(&p->dly, p->left);
     yazs_mixer_rt(p);
+    freeverb_tick(&p->freeverb, p->left, p->right);
+    p->left = p->freeverb.outL;
+    p->right = p->freeverb.outR;
 }
 
 VOICE*

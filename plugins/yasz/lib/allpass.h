@@ -1,6 +1,6 @@
 /*
  * YASZ (Yet Another Simple synthesiZer)
- * Copyright (C) 2020 Victor Rosales <todoesverso@gmail.com>
+ * Copyright (C) 2021 Victor Rosales <todoesverso@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
@@ -15,22 +15,21 @@
  */
 
 
-#ifndef PLUGINS_YASZ_LIB_KS_H_
-#define PLUGINS_YASZ_LIB_KS_H_
-
+#ifndef PLUGINS_YASZ_LIB_ALLPASS_H_
+#define PLUGINS_YASZ_LIB_ALLPASS_H_
 #include <stdint.h>
 
-typedef struct ks_t {
-    // TODO: Review this number
-    double   table[96000];
-    double   sample;
-    uint32_t srate;
-    uint32_t size;
-    uint32_t index;
-} KS;
+typedef struct t_allpass {
+    uint32_t  samplerate;
+    float     feedback;
+    double    buffer[2048];
+    uint32_t  buffsize;
+    uint32_t  buffindex;
+} ALLPASS;
 
-KS ks_new(uint32_t const srate);
-double ks_render_rt(KS* p);
-void ks_freq_rt(KS* p, double freq);
 
-#endif  // PLUGINS_YASZ_LIB_KS_H_
+ALLPASS allpass_new(uint32_t samplerate, uint32_t buffsize);
+double allpass_out(ALLPASS* p);
+double allpass_tick(ALLPASS* p, double sample);
+void allpass_feedback(ALLPASS* p, float feedback);
+#endif  // PLUGINS_YASZ_LIB_ALLPASS_H_

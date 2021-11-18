@@ -20,6 +20,8 @@
 #include <stdint.h>
 #include "utils.h"
 #include "voice.h"
+#include "dly.h"
+#include "freeverb.h"
 #include "pan.h"
 
 /**
@@ -44,8 +46,9 @@ typedef struct t_yasz {
     //   - a global envelop configuration
     //   - an array of voices with adsr
 
+    DLY dly;
+    FREEVERB freeverb;
     VOICE voice[VOICE_MAX_VOICES];
-
     PANPOS pan_position;
     double pan_value;
     double left;

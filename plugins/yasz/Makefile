@@ -22,6 +22,10 @@ FILES_DSP =       \
   lib/osct.c      \
   lib/wave.c      \
   lib/ks.c        \
+  lib/dly.c       \
+  lib/comb.c      \
+  lib/allpass.c   \
+  lib/freeverb.c  \
   lib/yasz.c
 
 
@@ -33,7 +37,7 @@ FILES_UI  = \
 
 include ../../dpf/Makefile.plugins.mk
 BUILD_C_FLAGS += -std=c11 -fopt-info-all
-BASE_FLAGS += -fdiagnostics-color=always
+BASE_FLAGS += -fdiagnostics-color=always -fstack-check 
 # --------------------------------------------------------------
 # Enable all possible plugin types
 
