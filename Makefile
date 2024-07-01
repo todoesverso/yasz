@@ -4,10 +4,17 @@
 # Created by falkTX
 #
 
+#  git submodule update --init --recursive
+
 include dpf/Makefile.base.mk
 
 all: dgl plugins gen
 
+init_git_submodules: 
+	git submodule update --init --recursive
+
+fmt:
+	clang-format  -i plugins/yasz/lib/*
 # --------------------------------------------------------------
 
 dgl:

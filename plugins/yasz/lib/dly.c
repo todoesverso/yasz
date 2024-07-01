@@ -19,43 +19,36 @@
 #include <stdint.h>
 #include <stdio.h>
 
-DLY
-dly_new(double samplerate, uint32_t delay_ms, double feedback) {
-    DLY dly = {
-        .samplerate = samplerate,
-        .delay_samples = (uint32_t)(samplerate* delay_ms / 1000),
-        .delay_ms = delay_ms,
-        .feedback = feedback,
-    };
+DLY dly_new(double samplerate, uint32_t delay_ms, double feedback) {
+  DLY dly = {
+      .samplerate = samplerate,
+      .delay_samples = (uint32_t)(samplerate * delay_ms / 1000),
+      .delay_ms = delay_ms,
+      .feedback = feedback,
+  };
 
-    return dly;
+  return dly;
 }
 
-void
-dly_delay_ms(DLY* p_dly, uint32_t delay_ms) {
-    p_dly->delay_samples = (uint32_t)(p_dly->samplerate * delay_ms / 1000);
+void dly_delay_ms(DLY *p_dly, uint32_t delay_ms) {
+  p_dly->delay_samples = (uint32_t)(p_dly->samplerate * delay_ms / 1000);
 }
 
-void
-dly_feedback(DLY* p_dly, double feedback) {
-    p_dly->feedback = feedback;
+void dly_feedback(DLY *p_dly, double feedback) { p_dly->feedback = feedback; }
+
+double dly_out(DLY *p_dly) {
+  return p_dly->buffer[p_dly->r_index] * p_dly->feedback;
 }
 
-double
-dly_out(DLY* p_dly) {
-    return p_dly->buffer[p_dly->r_index] * p_dly->feedback;
-}
+void dly_tick(DLY *p_dly, double sample) {
+  p_dly->buffer[p_dly->w_index] = sample;
 
-void
-dly_tick(DLY* p_dly, double sample) {
-    p_dly->buffer[p_dly->w_index] = sample;
+  int32_t r_index_tmp = p_dly->w_index - p_dly->delay_samples;
 
-    int32_t r_index_tmp = p_dly->w_index - p_dly->delay_samples;
+  if (r_index_tmp < 0) {
+    p_dly->r_index = r_index_tmp + MAXDLY;
+  }
 
-    if (r_index_tmp < 0) {
-        p_dly->r_index = r_index_tmp + MAXDLY;
-    }
-
-    p_dly->r_index = (p_dly->r_index + 1) % MAXDLY;
-    p_dly->w_index = (p_dly->w_index + 1) % MAXDLY;
+  p_dly->r_index = (p_dly->r_index + 1) % MAXDLY;
+  p_dly->w_index = (p_dly->w_index + 1) % MAXDLY;
 }

@@ -19,49 +19,44 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define undenormalize(n) { if (xabs(n) < 1e-37) { (n) = 0.0f; } }
-static inline double
-xabs(double n) {
-    return n < 0 ? -n : n;
+#define undenormalize(n)                                                       \
+  {                                                                            \
+    if (xabs(n) < 1e-37) {                                                     \
+      (n) = 0.0f;                                                              \
+    }                                                                          \
+  }
+static inline double xabs(double n) { return n < 0 ? -n : n; }
+
+#define undenormalise(sample)                                                  \
+  if (((*(unsigned int *)&sample) & 0x7f800000) == 0)                          \
+  sample = 0.0f
+
+COMB comb_new(uint32_t samplerate, uint32_t buffsize) {
+  COMB comb = {
+      .buffsize = buffsize,
+  };
+
+  return comb;
 }
 
-#define undenormalise(sample) if(((*(unsigned int*)&sample)&0x7f800000)==0) sample=0.0f
+double comb_out(COMB *p) { return p->buffer[p->buffindex]; }
 
-COMB
-comb_new(uint32_t samplerate, uint32_t buffsize) {
-    COMB comb = {
-        .buffsize = buffsize,
-    };
-
-    return comb;
+void comb_setdamp(COMB *p, float damp) {
+  p->damp1 = damp;
+  p->damp2 = 1 - damp;
 }
 
-double
-comb_out(COMB* p) {
-    return p->buffer[p->buffindex];
-}
+void comb_feedback(COMB *p, float feedback) { p->feedback = feedback; }
 
-void
-comb_setdamp(COMB* p, float damp) {
-    p->damp1 = damp;
-    p->damp2 = 1 - damp;
-}
+double comb_tick(COMB *p, double input) {
+  double out = p->buffer[p->buffindex];
+  undenormalize(out);
+  p->filterstore = (out * p->damp2) + (p->filterstore * p->damp1);
+  undenormalize(p->filterstore);
+  p->buffer[p->buffindex] = input + (p->filterstore * p->feedback);
+  if (++p->buffindex >= p->buffsize) {
+    p->buffindex = 0;
+  }
 
-void
-comb_feedback(COMB* p, float feedback) {
-    p->feedback = feedback;
-}
-
-double
-comb_tick(COMB* p, double input) {
-    double out = p->buffer[p->buffindex];
-    undenormalize(out);
-    p->filterstore = (out * p->damp2) + (p->filterstore * p->damp1);
-    undenormalize(p->filterstore);
-    p->buffer[p->buffindex] = input + (p->filterstore * p->feedback);
-    if (++p->buffindex >= p->buffsize) {
-        p->buffindex = 0;
-    }
-
-    return out;
+  return out;
 }

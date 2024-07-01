@@ -19,43 +19,37 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define undenormalize(n) { if (xabs(n) < 1e-37) { (n) = 0; } }
-static inline double
-xabs(double n) {
-    return n < 0 ? -n : n;
-}
-
+#define undenormalize(n)                                                       \
+  {                                                                            \
+    if (xabs(n) < 1e-37) {                                                     \
+      (n) = 0;                                                                 \
+    }                                                                          \
+  }
+static inline double xabs(double n) { return n < 0 ? -n : n; }
 
 ALLPASS
 allpass_new(uint32_t samplerate, uint32_t buffsize) {
-    ALLPASS allpass = {
-        .buffsize = buffsize,
-    };
+  ALLPASS allpass = {
+      .buffsize = buffsize,
+  };
 
-    return allpass;
+  return allpass;
 }
 
-double
-allpass_out(ALLPASS* p) {
-    return p->buffer[p->buffindex];
-}
+double allpass_out(ALLPASS *p) { return p->buffer[p->buffindex]; }
 
-void
-allpass_feedback(ALLPASS* p, float feedback) {
-    p->feedback = feedback;
-}
+void allpass_feedback(ALLPASS *p, float feedback) { p->feedback = feedback; }
 
-double
-allpass_tick(ALLPASS* p, double input) {
-    double bufout = p->buffer[p->buffindex];
-    undenormalize(bufout);
-    double out = -input + bufout;
+double allpass_tick(ALLPASS *p, double input) {
+  double bufout = p->buffer[p->buffindex];
+  undenormalize(bufout);
+  double out = -input + bufout;
 
-    p->buffer[p->buffindex] = input + (bufout * p->feedback);
+  p->buffer[p->buffindex] = input + (bufout * p->feedback);
 
-    if (++p->buffindex >= p->buffsize) {
-        p->buffindex = 0;
-    }
+  if (++p->buffindex >= p->buffsize) {
+    p->buffindex = 0;
+  }
 
-    return out;
+  return out;
 }

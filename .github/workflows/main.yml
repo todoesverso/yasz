@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Update git DPF submodule
-      run: git submodule sync && git submodule update --init
+      run: git submodule sync && git submodule update --init --recursive
     - name: Install build dependecies
       run: |
         apt update
