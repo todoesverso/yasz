@@ -6,9 +6,17 @@ on:
     branches: [ master ]
 
 jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    container: xianpengshen/clang-tools:14
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run clang-format
+      run: clang-format -n -Werror plugins/yasz/lib/* plugins/yasz/*.h plugins/yasz/*.cpp
+
   lint:
     runs-on: ubuntu-latest
-    container: python:3.8-alpine
+    container: python:3.12-alpine
     steps:
     - uses: actions/checkout@v2
     - name: Install cpplint
