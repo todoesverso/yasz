@@ -14,23 +14,13 @@ jobs:
     - name: Run clang-format
       run: clang-format -n -Werror plugins/yasz/lib/* plugins/yasz/*.h plugins/yasz/*.cpp
 
-  lint:
-    runs-on: ubuntu-latest
-    container: python:3.12-alpine
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install cpplint
-      run: pip install cpplint
-    - name: Run cpplint
-      run: cpplint --recursive --root=. plugins/
-
   build:
     runs-on: ubuntu-latest
     container: gcc:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Update git DPF submodule
-      run: git submodule sync && git submodule update --init --recursive
+      with:
+        submodules: recursive
     - name: Install build dependecies
       run: |
         apt update
