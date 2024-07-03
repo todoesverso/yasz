@@ -6,23 +6,21 @@ on:
     branches: [ master ]
 
 jobs:
-  lint:
+  fmt:
     runs-on: ubuntu-latest
-    container: python:3.8-alpine
+    container: xianpengshen/clang-tools:14
     steps:
     - uses: actions/checkout@v2
-    - name: Install cpplint
-      run: pip install cpplint
-    - name: Run cpplint
-      run: cpplint --recursive --root=. plugins/
+    - name: Run clang-format
+      run: clang-format -n -Werror plugins/yasz/lib/* plugins/yasz/*.h plugins/yasz/*.cpp
 
   build:
     runs-on: ubuntu-latest
     container: gcc:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Update git DPF submodule
-      run: git submodule sync && git submodule update --init
+      with:
+        submodules: recursive
     - name: Install build dependecies
       run: |
         apt update

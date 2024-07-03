@@ -2,18 +2,18 @@
  * YASZ (Yet Another Simple synthesiZer)
  * Copyright (C) 2021 Victor Rosales <todoesverso@gmail.com>
  *
- * Permission to use, copy, modify, and/or distribute this software for any purpose with
- * or without fee is hereby granted, provided that the above copyright notice and this
- * permission notice appear in all copies.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD
- * TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN
- * NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
- * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
- * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
- * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
  */
-
 
 #ifndef PLUGINS_YASZ_LIB_DLY_H_
 #define PLUGINS_YASZ_LIB_DLY_H_
@@ -23,20 +23,19 @@
 #define MAXDLY 192001
 
 typedef struct t_dly {
-    uint32_t  samplerate;
-    uint32_t  buff_size;
-    uint32_t  delay_ms;
-    uint32_t  delay_samples;
-    uint32_t  w_index;
-    uint32_t  r_index;
-    double    feedback;
-    double    buffer[MAXDLY];
+  uint32_t samplerate;
+  uint32_t buff_size;
+  uint32_t delay_ms;
+  uint32_t delay_samples;
+  uint32_t w_index;
+  uint32_t r_index;
+  double feedback;
+  double buffer[MAXDLY];
 } DLY;
 
-
 DLY dly_new(double samplerate, uint32_t delay_ms, double feedback);
-void dly_delay_ms(DLY* p_dly, uint32_t delay_ms);
-void dly_feedback(DLY* p_dly, double feedback);
-double dly_out(DLY* p_dly);
-void dly_tick(DLY* p_dly, double sample);
-#endif  // PLUGINS_YASZ_LIB_DLY_H_
+void dly_delay_ms(DLY *p_dly, uint32_t delay_ms);
+void dly_feedback(DLY *p_dly, double feedback);
+double dly_out(DLY *p_dly);
+void dly_tick(DLY *p_dly, double sample);
+#endif // PLUGINS_YASZ_LIB_DLY_H_
