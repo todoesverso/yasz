@@ -15,7 +15,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "lib/onepole.h"
+#include "onepole.h"
 
 static ONEPOLE *onepole_malloc();
 static void onepole_init(ONEPOLE *p_op, double freq);

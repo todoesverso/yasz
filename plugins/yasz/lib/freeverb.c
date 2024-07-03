@@ -62,8 +62,8 @@ void freeverb_setdamp(FREEVERB *p, float damp) {
 }
 
 void freeverb_setsr(FREEVERB *p, uint32_t sr) {
-  const uint8_t combs[] = {1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617};
-  const uint8_t allpasses[] = {556, 441, 341, 225};
+  const uint16_t combs[] = {1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617};
+  const uint16_t allpasses[] = {556, 441, 341, 225};
 
   double multiplier = (double)sr / FV_INITIALSR;
 

@@ -36,8 +36,9 @@ FILES_UI  = \
 # Do some magic
 
 include ../../dpf/Makefile.plugins.mk
-BUILD_C_FLAGS += -std=c11 -fopt-info-all
-BASE_FLAGS += -fdiagnostics-color=always -fstack-check 
+BUILD_C_FLAGS += -std=c11
+#-fopt-info-all
+BASE_FLAGS += -fdiagnostics-color=always -fstack-check -fdiagnostics-color=always  -Wall -Wpedantic
 # --------------------------------------------------------------
 # Enable all possible plugin types
 

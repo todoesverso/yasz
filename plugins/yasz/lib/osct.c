@@ -21,7 +21,6 @@
 #include <assert.h>
 #include <math.h>
 #include <stdint.h>
-#include <stdlib.h>
 
 /************************
  * Static osct.c functions
@@ -61,7 +60,7 @@ OSCT osct_new(uint32_t srate) {
       .srate = srate,
       .tlenoversr = (double)TLEN / srate,
       .ttable = yasz_saw_t,
-      .table = yasz_saw_t,
+      .table = yasz_saw_t[0],
   };
 
   return osc;

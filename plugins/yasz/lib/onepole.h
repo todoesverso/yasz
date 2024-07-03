@@ -17,7 +17,7 @@
 
 #ifndef PLUGINS_YASZ_LIB_ONEPOLE_H_
 #define PLUGINS_YASZ_LIB_ONEPOLE_H_
-#include "lib/utils.h"
+#include "utils.h"
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>

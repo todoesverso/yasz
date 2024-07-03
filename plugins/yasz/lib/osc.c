@@ -15,7 +15,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "lib/osc.h"
+#include "osc.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

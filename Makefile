@@ -14,7 +14,7 @@ init_git_submodules:
 	git submodule update --init --recursive
 
 fmt:
-	clang-format  -i plugins/yasz/lib/*
+	clang-format  -i plugins/yasz/lib/* plugins/yasz/*.cpp plugins/yasz/*.h
 # --------------------------------------------------------------
 
 dgl:
@@ -44,12 +44,15 @@ clean:
 	$(MAKE) clean -C plugins/yasz
 	rm -rf bin build
 
+clean_plugin:
+	rm -rf bin build
+
+full_clean_plugin: clean_plugin
+	$(MAKE) clean -C plugins/yasz
+
 install:
 	install -d ${HOME}/.lv2/yasz.lv2/
 	install -m 644 -D bin/yasz.lv2/* ${HOME}/.lv2/yasz.lv2/
-
-style:
-	astyle --options="astyle.cfg" "plugins/yasz/lib/*.c,*.h"
 # --------------------------------------------------------------
 
 .PHONY: plugins

@@ -87,7 +87,7 @@ protected:
   void initParameter(uint32_t index, Parameter &parameter) {
     switch (index) {
     case paramPan:
-      parameter.hints = kParameterIsAutomable; // modified x2.5
+      parameter.hints = kParameterIsAutomatable; // modified x2.5
       parameter.name = "pan";
       parameter.symbol = "pan";
       parameter.unit = "%";

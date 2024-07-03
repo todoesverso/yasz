@@ -18,6 +18,7 @@
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "Window.hpp"
+#include <stdint.h>
 
 START_NAMESPACE_DISTRHO
 

@@ -17,7 +17,6 @@
 
 #include "comb.h"
 #include <stdint.h>
-#include <stdio.h>
 
 #define undenormalize(n)                                                       \
   {                                                                            \
@@ -32,6 +31,7 @@ static inline double xabs(double n) { return n < 0 ? -n : n; }
   sample = 0.0f
 
 COMB comb_new(uint32_t samplerate, uint32_t buffsize) {
+  (void)samplerate;
   COMB comb = {
       .buffsize = buffsize,
   };

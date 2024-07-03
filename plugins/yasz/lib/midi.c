@@ -15,7 +15,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "lib/midi.h"
+#include "midi.h"
 #include <stdlib.h>
 
 /******************************
