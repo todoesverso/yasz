@@ -1,0 +1,5 @@
+CompileFlags: # Tweak the parse settings, example directory given to show format
+  Add:
+    - "-I/home/todoesverso/repos/yasz/dpf/distrho"  
+    - "-I/home/todoesverso/repos/yasz/plugins/yasz"
+    - "-I/home/todoesverso/repos/yasz/plugins/yasz/lib"
